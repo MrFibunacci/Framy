@@ -139,6 +139,7 @@ Route::run();
 
 ## Creating and Using Templates
 You can chose between these bridges:
+
  - [Smarty](http://www.smarty.net/documentation)
  - [mustache](https://github.com/bobthecow/mustache.php/wiki)
 
