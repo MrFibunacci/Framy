@@ -18,6 +18,6 @@
      * Little helper called dump and die
      * @param $val
      */
-    function dd($val){
+    function dd($val)  {
         var_dump($val);die;
     }
