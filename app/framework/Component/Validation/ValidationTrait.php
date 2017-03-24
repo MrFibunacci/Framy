@@ -8,12 +8,13 @@
     namespace app\framework\Component\Validation;
 
 
-    trait ValidationTrait {
+    trait ValidationTrait
+    {
         /**
-         * Get Validation component
-         *
-         * @return Validation
-         */
+        * Get Validation component
+        *
+        * @return Validation
+        */
         protected static function validate()
         {
             return Validation::getInstance();
