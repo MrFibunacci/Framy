@@ -7,6 +7,7 @@
 
     namespace app\framework\Component\Storage;
 
+    use app\framework\Component\StdLib\StdObject\DateTimeObject\DateTimeObject;
     use app\framework\Component\Storage\Disk\Disk;
     use app\framework\Component\Storage\Driver\AbsolutePathInterface;
     use app\framework\Component\Storage\Driver\DirectoryAwareInterface;

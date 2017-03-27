@@ -7,6 +7,7 @@
 
     namespace app\framework\Component\Storage\Driver\Local;
 
+    use app\framework\Component\StdLib\StdObject\ArrayObject\ArrayObject;
     use app\framework\Component\Storage\StorageException;
     use app\framework\Component\Storage\Driver\SizeAwareInterface;
     use app\framework\Component\Storage\Driver\DriverInterface;
@@ -18,11 +19,20 @@
     {
         protected $directory;
         protected $recentKey = null;
+        protected $publicUrl;
 
         function __construct($config)
         {
+            if(is_array($config)){
+                $config = new ArrayObject($config);
+            }
+
+            if(!$config instanceof ArrayObject){
+                throw new StorageException('Storage driver config must be an array or ArrayObject!');
+            }
+
             $this->helper = LocalHelper::getInstance();
-            $this->directory = $this->helper->normalizeDirectoryPath($config['root']);
+            $this->directory = $this->helper->normalizeDirectoryPath($config->key("root", '', true));
         }
 
         public function keyExists($key)
@@ -115,7 +125,52 @@
          */
         public function getKeys($key = '', $recursive = false)
         {
-            // TODO: Implement getKeys() method.
+            if ($key != '') {
+                $key = ltrim($key, DS);
+                $key = rtrim($key, DS);
+                $path = $this->directory . DS . $key;
+            } else {
+                $path = $this->directory;
+            }
+
+            if (!is_dir($path)) {
+                return [];
+            }
+
+            if ($recursive) {
+                try {
+                    $config = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+                    $directoryIterator = new \RecursiveDirectoryIterator($path, $config);
+                    $iterator = new \RecursiveIteratorIterator($directoryIterator);
+                    if (is_int($recursive) && $recursive > -1) {
+                        $iterator->setMaxDepth($recursive);
+                    }
+                } catch (\Exception $e) {
+                    $iterator = new \EmptyIterator;
+                }
+                $files = iterator_to_array($iterator);
+            } else {
+                $files = [];
+                $iterator = new \DirectoryIterator($path);
+                foreach ($iterator as $fileinfo) {
+                    $name = $fileinfo->getFilename();
+                    if ($name == '.' || $name == '..') {
+                        continue;
+                    }
+                    $files[] = $fileinfo->getPathname();
+                }
+            }
+
+            $keys = [];
+
+
+            foreach ($files as $file) {
+                $keys[] = $this->helper->getKey($file, $this->directory);
+            }
+            sort($keys);
+
+
+            return $keys;
         }
 
         /**
@@ -198,7 +253,9 @@
          */
         public function getURL($key)
         {
-            // TODO: Implement getURL() method.
+            $key = str_replace('\\', '/', $key);
+
+            return $this->publicUrl . '/' . ltrim($key, "/");
         }
 
         /**

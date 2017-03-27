@@ -23,12 +23,14 @@
         {
             if(self::isDisk($diskName)) {
                 //$this->disk = StdLibTrait::getConfig("app")['disks'][$diskName];
-                $this->disk = Config::getInstance()->get("disks", "app")[$diskName];
+                $this->disk = Config::getInstance()->get("disks", "filesystem")[$diskName];
             } else {
                 throw new StorageException(StorageException::DISK_NOT_FOUND);
             }
 
-            if($this->disk['driver'] === 'local'){
+            if(!$this->is($this->disk['driver'])) $this->disk['driver'] = Config::getInstance()->get("default", "filesystem");
+
+            if($this->disk['driver'] == 'local'){
                 $this->Driver = new LocalStorageDriver($this->disk);
             }
         }
@@ -41,7 +43,7 @@
          */
         public function isDisk($diskName)
         {
-            if(isset(Config::getInstance()->get("filesystem")['disks'][$diskName])) {
+            if($this->is(Config::getInstance()->get("disks", "filesystem")[$diskName])) {
                 return true;
             } else {
                 return false;

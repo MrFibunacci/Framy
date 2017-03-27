@@ -9,6 +9,9 @@
     namespace app\framework\Component\StdLib\StdObject\ArrayObject;
 
 
+    use app\framework\Component\StdLib\StdObject\StdObjectWrapper;
+    use app\framework\Component\StdLib\StdObject\StringObject\StringObject;
+
     trait ManipulationTrait
     {
         /**
@@ -44,20 +47,35 @@
         }
 
         /**
-         * get or update key in current Array
+         * Get or update the given key inside current array.
          *
-         * @param      $key
-         * @param null $value
+         * @param string|int|StringObject $key Array key
+         * @param null|mixed              $value If set, the value under current $key will be updated and not returned.
+         * @param bool                    $setOnlyIfDoesntExist Set the $value only in case if the $key doesn't exist.
          *
-         * @return mixed
+         * @return $this|mixed|StringObject The value of the given key.
          */
-        public function key($key, $value = null)
+        public function key($key, $value = null, $setOnlyIfDoesntExist = false)
         {
+            $key = StdObjectWrapper::toString($key);
             $array = $this->val();
 
-            if(!$this->isNull($value)){
+            if ($setOnlyIfDoesntExist && !$this->keyExists($key)) {
                 $array[$key] = $value;
                 $this->val($array);
+
+                return $value;
+            } else {
+                if (!$setOnlyIfDoesntExist && !$this->isNull($value)) {
+                    $array[$key] = $value;
+                    $this->val($array);
+
+                    return $this;
+                }
+            }
+
+            if (!isset($array[$key])) {
+                return $value;
             }
 
             return $array[$key];

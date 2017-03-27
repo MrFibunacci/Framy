@@ -15,6 +15,22 @@
         use SingletonTrait;
 
         /**
+         * Gets the key using file $path and storage $directory
+         *
+         * @param string $path      Path to extract file key from
+         *
+         * @param string $directory Directory of the storage
+         *
+         * @return string
+         */
+        public function getKey($path, $directory)
+        {
+            $path = $this->normalizePath($path);
+
+            return ltrim(substr($path, strlen($directory)), '/');
+        }
+
+        /**
          * Create directory
          *
          * @param string $directory Directory path to create
