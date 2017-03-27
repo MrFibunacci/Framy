@@ -17,7 +17,8 @@
      *
      * @package app\framework\Component\StdLib\StdObject
      */
-    abstract class AbstractStdObject implements StdObjectInterface{
+    abstract class AbstractStdObject implements StdObjectInterface
+    {
         use ValidatorTrait;
 
         /**

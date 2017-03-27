@@ -62,7 +62,7 @@
          *
          * @return mixed String 'Array'.
          */
-        public function _toString()
+        public function __toString()
         {
             return "Array";
         }

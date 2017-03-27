@@ -23,5 +23,5 @@
         /**
          * @return mixed
          */
-        public function _toString();
+        public function __toString();
     }

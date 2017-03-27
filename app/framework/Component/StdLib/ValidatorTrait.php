@@ -8,13 +8,13 @@
 
     namespace app\framework\Component\StdLib;
 
-
     /**
      * Trait contains common validators
      *
      * @package app\framework\Component\StdLib
      */
-    trait ValidatorTrait {
+    trait ValidatorTrait
+    {
         protected static function is($var)
         {
             if (isset($var)) {

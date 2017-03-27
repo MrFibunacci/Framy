@@ -1,6 +1,6 @@
 <?php
     define('FRAMY_START', microtime(true));
-    define('ROOT_PATH', realpath(__DIR__)."\\");
+    define('ROOT_PATH', realpath(__DIR__));
 
     /*---------------------------------------
     | Register Class Loader
