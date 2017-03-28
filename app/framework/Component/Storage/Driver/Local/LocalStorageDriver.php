@@ -265,7 +265,7 @@
          */
         public function createDateFolderStructure()
         {
-            // TODO: Implement createDateFolderStructure() method.
+            return $this->dateFolderStructure;
         }
 
         /**
@@ -303,6 +303,13 @@
          */
         public function isDirectory($key)
         {
-            // TODO: Implement isDirectory() method.
+            $this->recentKey = $key;
+            $path = $this->buildPath($key);
+
+            if ($this->isDirectory($key)) {
+                return @rmdir($path);
+            }
+
+            return @unlink($path);
         }
     }

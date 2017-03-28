@@ -1,6 +1,7 @@
 <?php
     namespace app\framework\Component\Storage\File;
 
+    use app\framework\Component\StdLib\StdObject\DateTimeObject\DateTimeObject;
     use app\framework\Component\Storage\Storage;
     use app\framework\Component\Storage\StorageException;
 
@@ -8,6 +9,7 @@
     {
         protected $storage;
         protected $key;
+        protected $timeModified;
 
         function __construct($key, Storage $storage)
         {
@@ -49,7 +51,14 @@
          */
         public function getTimeModified($asDateTimeObject = false)
         {
-            // TODO: Implement getTimeModified() method.
+            if ($this->timeModified === null) {
+                $this->timeModified = $time = $this->storage->getTimeModified($this->key);
+                if ($time) {
+                    $this->timeModified = $asDateTimeObject ? $this->datetime()->setTimestamp($time) : $time;
+                }
+            }
+
+            return $this->timeModified;
         }
 
         /**
