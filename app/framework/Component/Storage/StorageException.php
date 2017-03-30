@@ -1,4 +1,10 @@
 <?php
+/**
+ * Framey Framework
+ *
+ * @copyright Copyright Framey
+ * @Author Marco Bier <mrfibunacci@gmail.com>
+ */
 
     namespace app\framework\Component\Storage;
 
