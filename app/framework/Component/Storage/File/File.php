@@ -11,13 +11,22 @@
         protected $key;
         protected $timeModified;
 
+        /**
+         * Construct a File instance
+         *
+         * @param string  $key     File key
+         * @param Storage $storage Storage to use
+         *
+         * @throws \app\framework\Component\Storage\StorageException
+         * @return \app\framework\Component\Storage\File\File
+         */
         function __construct($key, Storage $storage)
         {
             $this->storage = $storage;
             $this->key     = $key;
 
             //make sure a file path is given
-            if(!$this->storage->keyExists($this->key)){
+            if($this->storage->keyExists($this->key) && $this->getStorage()->isDirectory($this->key)){
                 throw new StorageException(StorageException::FILE_NOT_FOUND, [$key]);
             }
         }
