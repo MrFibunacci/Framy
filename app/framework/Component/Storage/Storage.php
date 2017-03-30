@@ -173,6 +173,7 @@
                 return $this->getDriver()->touchKey($key);
             }
         }
+
         /**
          * Get file size<br />
          * Requires '\app\framework\Component\Storage\Driver\SizeAwareInterface' to be implemented by a Driver class

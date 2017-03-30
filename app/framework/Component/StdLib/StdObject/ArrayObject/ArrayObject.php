@@ -14,7 +14,7 @@
     use app\framework\Component\StdLib\StdObject\ArrayObject\ValidatorTrait;
     use app\framework\Component\StdLib\StdObject\StdObjectTrait;
 
-    class ArrayObject extends AbstractStdObject implements \ArrayAccess, \Countable
+    class ArrayObject extends AbstractStdObject implements \ArrayAccess, \Countable, \IteratorAggregate
     {
         use ValidatorTrait,ManipulationTrait,StdObjectTrait;
 
@@ -154,5 +154,18 @@
         public function count()
         {
             return count($this->val());
+        }
+
+        /**
+         * (PHP 5 &gt;= 5.0.0)<br/>
+         * Retrieve an external iterator
+         *
+         * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
+         * @return Traversable An instance of an object implementing <b>Iterator</b> or
+         *       <b>Traversable</b>
+         */
+        public function getIterator()
+        {
+            return new \ArrayIterator($this->value);
         }
     }

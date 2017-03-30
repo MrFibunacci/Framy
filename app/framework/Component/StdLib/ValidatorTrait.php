@@ -7,6 +7,7 @@
  */
 
     namespace app\framework\Component\StdLib;
+    use app\framework\Component\StdLib\StdObject\StdObjectWrapper;
 
     /**
      * Trait contains common validators
@@ -229,5 +230,65 @@
         protected static function isSubClassOf($subclass, $class)
         {
             return is_subclass_of($subclass, $class);
+        }
+
+        /**
+         * Check if $instance is a StringObject.
+         *
+         * @param mixed $instance
+         *
+         * @return bool
+         */
+        protected static function isStringObject($instance)
+        {
+            return StdObjectWrapper::isStringObject($instance);
+        }
+
+        /**
+         * Check if $instance is a DateTimeObject.
+         *
+         * @param mixed $instance
+         *
+         * @return bool
+         */
+        protected static function isDateTimeObject($instance)
+        {
+            return StdObjectWrapper::isDateTimeObject($instance);
+        }
+
+        /**
+         * Check if $instance is a FileObject.
+         *
+         * @param mixed $instance
+         *
+         * @return bool
+         */
+        protected static function isFileObject($instance)
+        {
+            return StdObjectWrapper::isFileObject($instance);
+        }
+
+        /**
+         * Check if $instance is an ArrayObject.
+         *
+         * @param mixed $instance
+         *
+         * @return bool
+         */
+        protected static function isArrayObject($instance)
+        {
+            return StdObjectWrapper::isArrayObject($instance);
+        }
+
+        /**
+         * Check if $instance is a UrlObject.
+         *
+         * @param mixed $instance
+         *
+         * @return bool
+         */
+        protected static function isUrlObject($instance)
+        {
+            return StdObjectWrapper::isUrlObject($instance);
         }
     }
