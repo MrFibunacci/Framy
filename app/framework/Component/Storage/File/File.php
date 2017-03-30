@@ -1,6 +1,7 @@
 <?php
     namespace app\framework\Component\Storage\File;
 
+    use app\framework\Component\StdLib\StdObject\DateTimeObject\DateTimeObject;
     use app\framework\Component\Storage\Storage;
     use app\framework\Component\Storage\StorageException;
 
