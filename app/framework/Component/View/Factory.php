@@ -38,6 +38,8 @@
          */
         protected $names = [];
 
+        public $engine;
+
         /**
          * The extension to engine bindings.
          *
@@ -45,8 +47,19 @@
          */
         protected $extensions = ['.tpl' => 'Smarty', '.mustache' => 'mustache', '.php' => 'php'];
 
-        function __construct()
+        function __construct($view)
         {
             $this->finder = new FileViewFinder(new Storage("templates"), $this->extensions);
+            $this->names[$view] = $this->finder->find($view);
+
+            $this->engine = $this->extensions[".".explode(".", $this->names[$view])[1]];
+        }
+
+        /**
+         * @return array
+         */
+        public function getNames()
+        {
+            return $this->names;
         }
     }

@@ -8,6 +8,7 @@
 
     namespace app\framework\Component\View;
 
+    use app\framework\Component\TemplateEngine\TemplateEngine;
 
     class View
     {
@@ -32,10 +33,11 @@
          */
         protected $path;
 
-        function __construct($view = null, $data = [], $path, $engine)
+        function __construct($view = null, $data = [], $path, $engine = null)
         {
-            $this->view = $view;
-            $this->path = $path;
+            $this->view   = $view;
+            $this->path   = $path;
+            $this->data   = $data;
             $this->engine = $engine;
         }
 
@@ -48,5 +50,8 @@
          * @throws \Throwable
          */
         public function render(callable $callback = null)
-        {}
+        {
+            // TODO write some awesome shit that renders the template now
+            $TE = new TemplateEngine($this->engine);
+        }
     }

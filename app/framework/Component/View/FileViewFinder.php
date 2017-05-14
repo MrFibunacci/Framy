@@ -222,7 +222,7 @@
         {
             foreach ((array) $paths as $path) {
                 foreach ($this->getPossibleViewFiles($name) as $file) {
-                    return $path.'/'.$file;
+                    return $path.'\\'.$file;
                 }
             }
 
