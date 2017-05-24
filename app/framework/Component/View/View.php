@@ -52,6 +52,7 @@
         public function render(callable $callback = null)
         {
             // TODO write some awesome shit that renders the template now
-            $TE = new TemplateEngine($this->engine);
+            $TE = new TemplateEngine();
+            $TE->getInstance()->display($this->view);
         }
     }
