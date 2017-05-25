@@ -14,7 +14,8 @@
      *
      * @package app\framework\Component\StdLib\StdObject
      */
-    interface StdObjectInterface {
+    interface StdObjectInterface
+    {
         /**
          * @param $value
          */

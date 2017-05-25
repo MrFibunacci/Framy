@@ -10,8 +10,6 @@
 
     use app\framework\Component\StdLib\ValidatorTrait;
 
-    require(realpath(__DIR__."/../ValidatorTrait.php"));
-
     abstract class AbstractException extends \Exception
     {
         use ValidatorTrait;
@@ -73,7 +71,7 @@
             }
 
             if(!$this->isNull($params)) {
-            //    $message = $this->str($message)->format($params)->val();
+//                $message = $this->str($message)->format($params)->val();
             }
 
             parent::__construct($message, $code);
