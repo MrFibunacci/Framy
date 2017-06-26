@@ -1,7 +1,4 @@
 <?php
-// "Simplified" because I am to lazy to implement an more Complex Class Loader
-namespace app\framework\Component\Database\Bridge\Medoo;
-
 /*!
  * Medoo database framework
  * http://medoo.in
@@ -9,8 +6,11 @@ namespace app\framework\Component\Database\Bridge\Medoo;
  *
  * Copyright 2017, Angel Lai
  * Released under the MIT license
+ * Changed by Marco Bier <mrfibunacci@gmail.com>
  */
 
+namespace app\framework\Component\Database;
+use app\framework\Component\Config\Config;
 use PDO;
 
 class Medoo
@@ -30,6 +30,10 @@ class Medoo
 
 	public function __construct($options = null)
 	{
+        if (is_string($options)) {
+            $options = $this->fetchOptions(Config::getInstance()->get("connections", "database")[$options]);
+        }
+
 		try {
 			if (is_array($options))
 			{
@@ -389,7 +393,7 @@ class Medoo
 				)
 				{
 					$operator = $match[ 2 ];
-					
+
 					$wheres[] = $this->columnQuote($match[ 1 ]) . ' ' . $operator . ' ' . $this->columnQuote($match[ 3 ]);
 				}
 				else
@@ -861,7 +865,7 @@ class Medoo
 		$column = $where == null ? $join : $columns;
 
 		$is_single_column = (is_string($column) && $column !== '*');
-		
+
 		$query = $this->query($this->selectContext($table, $join, $columns, $where));
 
 		$stack = [];
@@ -1087,7 +1091,7 @@ class Medoo
 				{
 					return $data[ 0 ][ preg_replace('/^[\w]*\./i', "", $column) ];
 				}
-				
+
 				if ($column === '*')
 				{
 					return $data[ 0 ];
@@ -1263,5 +1267,30 @@ class Medoo
 
 		return $output;
 	}
+
+    private function fetchOptions($optionsFromConf)
+    {
+        $temp = [];
+        foreach ($optionsFromConf as $key => $value) {
+            switch ($key) {
+                case 'driver':
+                    $temp['database_type'] = $value;
+                    break;
+
+                case 'database':
+                    $temp['database_name'] = $value;
+                    break;
+
+                case 'host':
+                    $temp['server'] = $value;
+                    break;
+
+                default:
+                    $temp[$key] = $value;
+                    break;
+            }
+        }
+        return $temp;
+    }
 }
 ?>
