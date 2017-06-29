@@ -44,23 +44,12 @@
         protected $hints = [];
 
         /**
-         * Register a view extension with the finder.
-         *
-         * @var array
-         */
-        protected $extensions = ['php', 'tpl'];
-
-        /**
          * Create a new file view loader instance.
          */
-        function __construct(Storage $files, array $extensions = null)
+        function __construct(Storage $files)
         {
             $this->files = $files;
             $this->paths[] = $files->getDisk()->getPath();
-
-            if($this->is($extensions)){
-                $this->extensions = $this->fixExtensionsArray($extensions);
-            }
         }
 
         /**
@@ -228,8 +217,8 @@
 
             throw new \InvalidArgumentException("View [$name] not found.");
         }
-        private function fixExtensionsArray($extensions)
 
+        private function fixExtensionsArray($extensions)
         {
             $temp = [];
             foreach($extensions as $key => $val){

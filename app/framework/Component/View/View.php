@@ -33,12 +33,22 @@
          */
         protected $path;
 
+        /**
+         * An funcking instance of the goddam templateEngine
+         *
+         * @var
+         */
+        private $templateEngine;
+
         function __construct($view = null, $data = [], $path, $engine = null)
         {
             $this->view   = $view;
             $this->path   = $path;
             $this->data   = $data;
             $this->engine = $engine;
+
+            $TE = new TemplateEngine();
+            $this->templateEngine = $TE->getInstance();
         }
 
         /**
@@ -52,7 +62,6 @@
         public function render(callable $callback = null)
         {
             // TODO write some awesome shit that renders the template now
-            $TE = new TemplateEngine();
-            $TE->getInstance()->display($this->view);
+            $this->templateEngine->display($this->view);
         }
     }
