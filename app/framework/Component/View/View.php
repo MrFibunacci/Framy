@@ -1,14 +1,15 @@
 <?php
-/**
- * Framey Framework
- *
- * @copyright Copyright Framey
- * @Author Marco Bier <mrfibunacci@gmail.com>
- */
+    /**
+     * Framey Framework
+     *
+     * @copyright Copyright Framey
+     * @Author Marco Bier <mrfibunacci@gmail.com>
+     */
 
     namespace app\framework\Component\View;
 
     use app\framework\Component\TemplateEngine\TemplateEngine;
+    use app\framework\Component\Storage\Storage;
 
     class View
     {
@@ -38,17 +39,21 @@
          *
          * @var
          */
-        private $templateEngine;
+        private $TemplateEngine;
 
-        function __construct($view = null, $data = [], $path, $engine = null)
+        function __construct($view = null, $data = [])
         {
-            $this->view   = $view;
+            $this->view   = self::validateViewName($view);
             $this->path   = $path;
             $this->data   = $data;
             $this->engine = $engine;
 
             $TE = new TemplateEngine();
-            $this->templateEngine = $TE->getInstance();
+            $Storage = new Storage("templates");
+
+            $this->TemplateEngine = $TE->getInstance();
+            $this->TemplateEngine->setTemplateDir($Storage->getAbsolutePath());
+            $this->TemplateEngine->setCompileDir($Storage->getAbsolutePath()."/templates_c");
         }
 
         /**
@@ -61,7 +66,27 @@
          */
         public function render(callable $callback = null)
         {
-            // TODO write some awesome shit that renders the template now
-            $this->templateEngine->display($this->view);
+            try {
+                $this->assignData($this->data);
+                $this->TemplateEngine->display($this->view);
+            } catch(\Exception $e) {
+                echo $e->getMessage();
+            }
+        }
+
+        private function assignData($data)
+        {
+            foreach ($data as $valueName => $dataSet) {
+                $this->TemplateEngine->assign($valueName, $dataSet);
+            }
+        }
+
+        private static function validateViewName($view)
+        {
+            if(explode(".", $view)[1] == null){
+                return $view.".tpl";
+            } else {
+                return $view;
+            }
         }
     }

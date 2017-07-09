@@ -34,9 +34,7 @@
          * @return \app\framework\Component\View\View
          */
         function view($view = null, $data = [], $mergeData = []){
-            $Factory = new \app\framework\Component\View\Factory($view);
-            dd($Factory);
-            $View = new \app\framework\Component\View\View($view, $data, $Factory->getNames(), $Factory->engine);
+            $View = new \app\framework\Component\View\View($view, $data);
             $View->render();
         }
     }
