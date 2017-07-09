@@ -43,11 +43,11 @@
 
         private function getAllData()
         {
-            $files = $this->arr(scandir(ROOT_PATH."\\config\\"));
+            $files = $this->arr(scandir(ROOT_PATH.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR));
             $files->removeFirst()->removeFirst();
 
             foreach($files->val() as $file){
-                $temp[explode(".", $file)[0]] = include(ROOT_PATH."\\config\\".$file);
+                $temp[explode(".", $file)[0]] = include(ROOT_PATH.DIRECTORY_SEPARATOR."config".DIRECTORY_SEPARATOR.$file);
             }
 
             $this->data = $this->arr($temp);

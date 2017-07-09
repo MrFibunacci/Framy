@@ -26,7 +26,7 @@
          */
         public function __construct($value, $makeArrayElemObj = false)
         {
-            if($this->isArray($value)){
+            if(is_array($value)){
                 $this->val($value);
             }
         }

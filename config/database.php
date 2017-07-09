@@ -7,7 +7,9 @@
          | Database Connections
          |----------------------------------------
          |
-         | Hier tolle Beschreibung einfügen!
+         | Here you can configur your connections. You can ether use the
+         | here showen syntax or the syntax from Medoo. The key of the array
+         | in the example 'mysql' is the name of the connection.
          |
          */
 
@@ -15,10 +17,10 @@
             'mysql' => [
                 'driver' => 'mysql',
                 'host' => 'localhost',
-                'port' => '3306',
-                'database' => 'forge',
-                'username' => 'root',
-                'password' => 'test',
+                'port' => 3306,
+                'database' => 'YOUR_DATABASE',
+                'username' => 'YOUR_USERNAME',
+                'password' => 'YOUR_PASSWORD',
                 'charset' => 'utf8',
                 'collation' => 'utf8_unicode_ci',
                 'prefix' => '',

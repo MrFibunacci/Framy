@@ -29,8 +29,8 @@
             }
             $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
 
-            if(file_exists(ROOT_PATH."/".$fileName))
-                return ROOT_PATH."/".$fileName;
+            if(file_exists(ROOT_PATH.DIRECTORY_SEPARATOR.$fileName))
+                return ROOT_PATH.DIRECTORY_SEPARATOR.$fileName;
 
             return false;
         }
