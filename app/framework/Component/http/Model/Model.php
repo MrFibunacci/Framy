@@ -38,13 +38,16 @@
         }
 
         protected function DB($dbname = null){
-            if($this->is($dbname)){
-                $this->DB = new \app\framework\Component\Database\Medoo($this->connenction);
+            if((!$this->instanceOf($this->DB, "\app\framework\Component\Database\Medoo") && !$this->is($connection)) && !$this->is($dbname)){
+                if($this->is($dbname)){
+                    $this->DB = new \app\framework\Component\Database\Medoo($this->connenction);
+                } else {
+                    $this->DB = new \app\framework\Component\Database\Medoo($dbname);
+                }
+                return $this;
             } else {
-                $this->DB = new \app\framework\Component\Database\Medoo($dbname);
+                throw new \Exception("There is no connection setup!");
             }
-
-            return $this;
         }
 
         protected function select($join, $columns = null, $where = null, $table = null)
