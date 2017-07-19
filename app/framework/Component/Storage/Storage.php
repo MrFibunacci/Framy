@@ -37,7 +37,8 @@
             return $this->disk->keyExists($key);
         }
 
-        public function getDriver(){
+        public function getDriver()
+        {
             return $this->disk->getDriver();
         }
 
@@ -154,7 +155,6 @@
         public function isDirectory($key)
         {
             if($this->supportsDirectories()){
-
             }
         }
 

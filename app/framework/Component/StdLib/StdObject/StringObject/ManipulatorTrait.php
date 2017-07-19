@@ -335,8 +335,6 @@
         /**
          * Replace string using regex
          *
-         * TODO: unit test
-         *
          * @param string $pattern The pattern to search for. It can be either a string or an array with strings.
          * @param mixed  $replacement The string or an array with strings to replace.
          * @param int    $limit The maximum possible replacements for each pattern in each subject string. Defaults to -1 (no limit).

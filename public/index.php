@@ -28,5 +28,6 @@
     | Here you are registering web and Components routes
     |
     */
+
     include(realpath(__DIR__."/../routes/web.php"));
     include(realpath(__DIR__."/../routes/api.php"));

@@ -8,23 +8,22 @@
 
     namespace app\framework\Component\TemplateEngine;
 
-
-    use app\framework\Component\TemplateEngine\Bridge\Loader;
+    require("Smarty/Smarty.class.php");
 
     class TemplateEngine
     {
-        private $bridge;
+        private static $instance;
 
-        function __construct($useBridge)
+        function __construct()
         {
-            $this->bridge = Loader::getBridge($useBridge);
+            $this::$instance = new \Smarty();
         }
 
         /**
-         * @return mixed
+         * @return \Smarty
          */
-        public function getBridge()
+        public function getInstance()
         {
-            return $this->bridge;
+            return $this::$instance;
         }
     }
