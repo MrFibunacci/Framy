@@ -249,4 +249,31 @@
 
             return $this;
         }
+
+        /**
+         * Sort an array by values using a user-defined comparison function<br />
+         * This function assigns new keys to the elements in array. It will remove any existing keys that may have been assigned, rather than just reordering the keys.<br />
+         * The comparison function must return an integer less than, equal to, or greater than zero if the first argument is considered to be respectively less than, equal to, or greater than the second.
+         *
+         * @param callable $comparisonFunction
+         *
+         * @throws ArrayObjectException
+         *
+         * @return $this
+         */
+        public function sortUsingFunction($comparisonFunction)
+        {
+            if (!is_callable($comparisonFunction)) {
+                throw new ArrayObjectException(ArrayObjectException::MSG_INVALID_ARG, [
+                    '$comparisonFunction',
+                    'callable'
+                ]);
+            }
+
+            $val = $this->val();
+            usort($val, $comparisonFunction);
+            $this->val($val);
+
+            return $this;
+        }
     }

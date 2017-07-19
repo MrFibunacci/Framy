@@ -1,5 +1,6 @@
 <?php
     namespace app\framework\Component\StdLib;
+    use app\framework\Component\StdLib\ValidatorTrait;
     use app\framework\Component\StdLib\StdObject\StdObjectTrait;
 
     /**

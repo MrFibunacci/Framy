@@ -7,7 +7,6 @@
  */
 
     namespace app\framework\Component\StdLib\StdObject;
-
     use app\framework\Component\StdLib\ValidatorTrait;
 
     /**
@@ -29,7 +28,7 @@
          */
         public function val($value = null)
         {
-            if($this->isNull($value)){
+            if(is_null($value)){
                 return $this->value;
             }
 

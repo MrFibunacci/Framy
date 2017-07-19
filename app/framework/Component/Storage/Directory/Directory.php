@@ -8,6 +8,7 @@
 
     namespace app\framework\Component\Storage\Directory;
 
+    use app\framework\Component\EventManager\EventManagerTrait;
     use app\framework\Component\StdLib\StdLibTrait;
     use app\framework\Component\Storage\File\File;
     use app\framework\Component\Storage\Storage;
@@ -15,7 +16,7 @@
 
     class Directory implements DirectoryInterface, \IteratorAggregate
     {
-        use StdLibTrait;
+        use StdLibTrait,EventManagerTrait;
 
         protected $key;
         protected $storage;

@@ -9,32 +9,15 @@
     | to using a Closure or controller method. Build something great!
     |
     */
-    $klein = new app\framework\Component\Route\Klein\Klein();
 
-    $klein->respond(function () {
-        return view("welcome");
+    use \app\framework\Component\Route\Klein\Klein;
+
+    $klein = new Klein();
+
+    $klein->respond(function(){
+        return 'Test';
     });
 
     // add more routes here ...
 
     $klein->dispatch();
-    /*    use app\framework\Component\Route\Config;
-        use app\framework\Component\Route\Route;
-
-        //config
-        Config::set('basepath', 'My%20PHP%20Framework/public');
-
-        //init routing
-        Route::init();
-
-        Route::add('user/(.*)/edit',function($id){
-            echo 'Edit user with id '.$id;
-        });
-
-        Route::add('',function(){
-            //echo 'Welcome :-)';
-        });
-
-        // add more here
-
-        Route::run();*/

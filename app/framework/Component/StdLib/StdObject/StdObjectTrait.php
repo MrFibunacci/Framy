@@ -21,7 +21,7 @@
          *
          * @return ArrayObject
          */
-        protected static function arr(array $array)
+        protected static function arr($array = null)
         {
             return new ArrayObject($array);
         }

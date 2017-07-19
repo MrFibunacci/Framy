@@ -11,7 +11,6 @@
     use app\framework\Component\StdLib\StdObject\ArrayObject\ArrayObject;
     use app\framework\Component\StdLib\StdObject\StdObjectTrait;
     use app\framework\Component\StdLib\StdObject\StringObject\StringObject;
-    use app\framework\Component\StdLib\ValidatorTrait;
     use app\framework\Component\StdLib\StdObject\AbstractStdObject;
 
     /**
@@ -22,7 +21,7 @@
      */
     class UrlObject extends AbstractStdObject
     {
-        use ValidatorTrait, ManipulatorTrait, StdObjectTrait;
+        use ManipulatorTrait, StdObjectTrait;
 
         protected $value;
 

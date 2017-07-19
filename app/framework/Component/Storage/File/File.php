@@ -1,12 +1,16 @@
 <?php
     namespace app\framework\Component\Storage\File;
 
+    use app\framework\Component\EventManager\EventManagerTrait;
     use app\framework\Component\StdLib\StdObject\DateTimeObject\DateTimeObject;
     use app\framework\Component\Storage\Storage;
+    use app\framework\Component\Storage\StorageEvent;
     use app\framework\Component\Storage\StorageException;
 
     class File implements FileInterface
     {
+        use EventManagerTrait;
+
         protected $storage;
         protected $key;
         protected $timeModified;
@@ -83,6 +87,7 @@
          */
         public function setContents($contents, $append = false)
         {
+            $this->eventManager()->fire(StorageEvent::FILE_SAVED, new StorageEvent($this));
             return $this->storage->setContents($this->key, $contents, $append);
         }
 
@@ -122,7 +127,16 @@
          */
         public function rename($newName)
         {
-            return $this->storage->renameKey($this->key, $newName);
+            if ($this->storage->renameKey($this->key, $newName)) {
+                $event = new StorageEvent($this);
+
+                $event->oldName = $this->key;
+                $this->key = $newName;
+                $this->eventManager()->fire(StorageEvent::FILE_RENAMED, $event);
+                return true;
+            }
+
+            return false;
         }
 
         /**
@@ -132,7 +146,13 @@
          */
         public function delete()
         {
-            return $this->storage->deleteKey($this->key);
+            if ($this->storage->deleteKey($this->key)) {
+                $this->eventManager()->fire(StorageEvent::FILE_DELETED, new StorageEvent($this));
+
+                return true;
+            }
+
+            return false;
         }
 
         /**
@@ -142,6 +162,4 @@
         {
             return $this->storage->getAbsolutePath($this->key);
         }
-
-
     }

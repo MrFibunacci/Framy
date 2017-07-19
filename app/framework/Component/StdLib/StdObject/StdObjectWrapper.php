@@ -10,7 +10,6 @@
 
     use app\framework\Component\StdLib\StdObject\ArrayObject\ArrayObject;
     use app\framework\Component\StdLib\StdObject\StringObject\StringObject;
-    use app\framework\Component\StdLib\ValidatorTrait;
 
     /**
      * Standard object wrapper.
@@ -21,8 +20,6 @@
      */
     class StdObjectWrapper extends AbstractStdObject
     {
-        use ValidatorTrait;
-
         protected $value = null;
 
         /**
