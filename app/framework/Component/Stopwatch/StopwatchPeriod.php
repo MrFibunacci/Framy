@@ -73,7 +73,4 @@
         {
             return $this->start;
         }
-
-
-
     }

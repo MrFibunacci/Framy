@@ -11,7 +11,6 @@
     use app\framework\Component\StdLib\StdObject\AbstractStdObject;
     use app\framework\Component\StdLib\StdObject\ArrayObject\ArrayObject;
 
-
     /**
      * String standard object.
      * This is a helper class for working with strings.
@@ -32,7 +31,6 @@
          * @var string
          */
         protected $value;
-
 
         /**
          * Constructor.

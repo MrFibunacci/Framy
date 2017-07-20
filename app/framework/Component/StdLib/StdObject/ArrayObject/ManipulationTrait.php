@@ -8,7 +8,6 @@
 
     namespace app\framework\Component\StdLib\StdObject\ArrayObject;
 
-
     use app\framework\Component\StdLib\StdObject\StdObjectWrapper;
     use app\framework\Component\StdLib\StdObject\StringObject\StringObject;
 

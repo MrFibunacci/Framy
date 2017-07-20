@@ -186,8 +186,6 @@
 
             if($this->keyExists($key)){
                 return filectime($this->buildPath($key));
-//                return fileatime($this->buildPath($key));
-//                return filemtime($this->buildPath($key));
             }
 
             return false;

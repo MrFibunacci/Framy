@@ -8,7 +8,6 @@
 
     namespace app\framework\Component\StdLib\StdObject\ArrayObject;
 
-
     use app\framework\Component\StdLib\StdObject\AbstractStdObject;
     use app\framework\Component\StdLib\StdObject\ArrayObject\ManipulationTrait;
     use app\framework\Component\StdLib\StdObject\ArrayObject\ValidatorTrait;

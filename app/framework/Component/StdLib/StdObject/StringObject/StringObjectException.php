@@ -25,5 +25,4 @@
             101 => 'Unable to explode the string with the given delimiter "%s".',
             102 => 'Invalid hash algorithm provided: "%s". Visit http://www.php.net/manual/en/function.hash-algos.php for more information.'
         ];
-
     }
