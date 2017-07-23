@@ -19,7 +19,7 @@
      */
     class Event implements \ArrayAccess, \IteratorAggregate
     {
-        use StdLibTrait
+        use StdLibTrait;
 
         private $propagationStopped = false;
         private $eventData;
