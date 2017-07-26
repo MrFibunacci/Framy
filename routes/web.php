@@ -14,7 +14,7 @@
 
     $klein = new Klein();
 
-    $klein->respond(function(){
+    $klein->respond("GET", "/", function(){
         return 'Test';
     });
 

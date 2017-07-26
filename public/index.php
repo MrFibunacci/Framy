@@ -19,6 +19,7 @@
     | the responses back to the browser and delight our users.
     |
     */
+
     include(realpath(__DIR__."/../bootstrap.php"));
 
     /*---------------------------------------
