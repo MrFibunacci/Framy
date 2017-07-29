@@ -32,9 +32,14 @@
                 'visibility' => 'public',
             ],
 
-            'templates' => [
+            'view' => [
                 'driver' => 'local',
                 'root' => realpath(dirname(__FILE__).'/../storage/templates/')
+            ],
+
+            'viewCompiled' => [
+                'driver' => 'local',
+                'root' => realpath(dirname(__FILE__).'/../storage/templates/templates_c')
             ],
 
             'language' => [

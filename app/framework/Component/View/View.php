@@ -8,6 +8,7 @@
 
     namespace app\framework\Component\View;
 
+    use app\framework\Component\Config\Config;
     use app\framework\Component\TemplateEngine\TemplateEngine;
     use app\framework\Component\Storage\Storage;
 
@@ -44,16 +45,34 @@
         function __construct($view = null, $data = [])
         {
             $this->view   = self::validateViewName($view);
-            $this->path   = $path;
             $this->data   = $data;
-            $this->engine = $engine;
 
             $TE = new TemplateEngine();
-            $Storage = new Storage("templates");
-
             $this->TemplateEngine = $TE->getInstance();
-            $this->TemplateEngine->setTemplateDir($Storage->getAbsolutePath());
-            $this->TemplateEngine->setCompileDir($Storage->getAbsolutePath()."/templates_c");
+
+            // set Config path
+            $this->TemplateEngine->setCompileDir($this->getPathFromConfig(Config::getInstance()->get("compiled", "view"))[0]->getAbsolutePath());
+
+            // get view paths
+            $config = Config::getInstance()->get("paths", "view");
+            $View = $this->getPathFromConfig($config);
+
+            // add view paths
+            $i = 0;
+            foreach($View as $key => $value){
+                if($key === "path"){
+                    if($i <= 0)
+                        $this->TemplateEngine->setTemplateDir($value);
+                    else
+                        $this->TemplateEngine->addTemplateDir($value);
+                } else {
+                    if($i <= 0)
+                        $this->TemplateEngine->setTemplateDir($value->getAbsolutePath());
+                    else
+                        $this->TemplateEngine->addTemplateDir($value->getAbsolutePath());
+                }
+                $i++;
+            }
         }
 
         /**
@@ -88,5 +107,22 @@
             } else {
                 return $view;
             }
+        }
+
+        private function getPathFromConfig($config)
+        {
+            if(!is_array($config))
+                $config = array($config);
+
+            $View = false;
+            foreach($config as $path){
+                $path = explode(":", $path);
+                if($path[0] == "disk"){
+                    $View[] = new Storage($path[1]);
+                } else {
+                    $View["paths"] = $path;
+                }
+            }
+            return $View;
         }
     }
