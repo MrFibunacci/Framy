@@ -14,6 +14,6 @@
     $autoLoader = new \app\framework\Component\ClassLoader\ClassLoader();
     $autoLoader->register();
 
-    $App = new \app\framework\Component\app\App();
+    $App = new \app\framework\Component\App\App();
 
     include("helper.php");
