@@ -1,19 +1,4 @@
 <?php
-    define('FRAMY_START', microtime(true));
-    define('ROOT_PATH', realpath(__DIR__));
-
-    /*---------------------------------------
-    | Register Class Loader
-    |----------------------------------------
-    |
-    | The house made Class auto loader.
-    |
-    */
-    require("app/framework/Component/ClassLoader/ClassLoader.php");
-
-    $autoLoader = new \app\framework\Component\ClassLoader\ClassLoader();
-    $autoLoader->register();
-
     if(! function_exists("dd")){
         /**
          * Little helper called dump and die
@@ -36,5 +21,33 @@
         function view($view = null, $data = [], $mergeData = []){
             $View = new \app\framework\Component\View\View($view, $data);
             $View->render();
+        }
+    }
+
+    if(! function_exists("app")){
+        /**
+         * Used to easily call Methods from classes without manually set
+         * locally Instances of them.
+         *
+         * @param string $classMethod The class name(if in \app\custom\ namespace) or the "namespace+className@methodToCall"
+         */
+        function app($classMethod){
+            return $GLOBALS["App"]->call($classMethod);
+        }
+    }
+
+    if(! function_exists("url")){
+        /**
+         * Basically completes just the the url
+         * e.g. /test to yourexample.site/test
+         *
+         * Simple, very simple.
+         *
+         * @param $path
+         *
+         * @return string
+         */
+        function url($path){
+            return $_SERVER['HTTP_HOST'].$path;
         }
     }

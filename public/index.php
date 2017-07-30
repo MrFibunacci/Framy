@@ -20,7 +20,7 @@
     |
     */
 
-    include(realpath(__DIR__."/../bootstrap.php"));
+    include(realpath(__DIR__."/../bootstrap/bootstrap.php"));
 
     /*---------------------------------------
     | Register Routes
@@ -32,3 +32,4 @@
 
     include(realpath(__DIR__."/../routes/web.php"));
     include(realpath(__DIR__."/../routes/api.php"));
+
