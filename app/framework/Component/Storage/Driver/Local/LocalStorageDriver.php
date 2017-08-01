@@ -15,12 +15,45 @@
     use app\framework\Component\Storage\Driver\AbsolutePathInterface;
     use app\framework\Component\Storage\Driver\TouchableInterface;
 
+    /**
+     * Class LocalStorageDriver v1.0
+     *
+     * @package app\framework\Component\Storage\Driver\Local
+     */
     class LocalStorageDriver implements SizeAwareInterface,DriverInterface,AbsolutePathInterface,TouchableInterface,DirectoryAwareInterface
     {
+        /**
+         * @var string
+         */
         protected $directory;
+
+        /**
+         * the last interacted key
+         *
+         * @var null
+         */
         protected $recentKey = null;
+
+        /**
+         * Public url
+         *
+         * @var
+         */
         protected $publicUrl;
 
+        /**
+         * Contains the LocalHelper Class
+         *
+         * @var LocalHelper
+         */
+        private $helper;
+
+        /**
+         * LocalStorageDriver constructor.
+         *
+         * @param $config
+         * @throws StorageException
+         */
         function __construct($config)
         {
             if(is_array($config)){
@@ -35,6 +68,12 @@
             $this->directory = $this->helper->normalizeDirectoryPath($config->key("root", '', true));
         }
 
+        /**
+         * Check if file/key exists
+         *
+         * @param string $key
+         * @return bool
+         */
         public function keyExists($key)
         {
             $this->recentKey = $key;
@@ -42,6 +81,13 @@
             return file_exists($this->buildPath($key));
         }
 
+        /**
+         * Build path or throw exception
+         *
+         * @param $key
+         * @return mixed
+         * @throws StorageException
+         */
         private function buildPath($key)
         {
             $path = $this->helper->buildPath($key, $this->directory, $this->create);
@@ -216,7 +262,7 @@
          * @param string $sourceKey
          * @param string $targetKey
          *
-         * @return bool
+         * @return true if succeeds
          * @throws \app\framework\Component\Storage\StorageException
          */
         public function renameKey($sourceKey, $targetKey)
@@ -258,6 +304,7 @@
 
         /**
          * Does this storage create a date folder structure?
+         * TODO: fix missing dateFolderStructure variable
          *
          * @return boolean
          */
@@ -267,6 +314,8 @@
         }
 
         /**
+         * To get the absolute path
+         *
          * @param $key
          *
          * @return mixed

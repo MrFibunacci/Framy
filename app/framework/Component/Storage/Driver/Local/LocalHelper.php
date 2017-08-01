@@ -10,6 +10,11 @@
     use app\framework\Component\StdLib\SingletonTrait;
     use app\framework\Component\Storage\StorageException;
 
+    /**
+     * Class LocalHelper v1.1
+     *
+     * @package app\framework\Component\Storage\Driver\Local
+     */
     class LocalHelper
     {
         use SingletonTrait;
@@ -47,6 +52,14 @@
                 throw new StorageException(StorageException::DIRECTORY_COULD_NOT_BE_CREATED, [$directory]);
             }
         }
+
+        /**
+         * To check if directory exists.
+         *
+         * @param $directory
+         * @param $create
+         * @throws StorageException If directory doesn't exist
+         */
         public function ensureDirectoryExists($directory, $create)
         {
             if (!is_dir($directory)) {
