@@ -8,13 +8,14 @@
 
     namespace app\framework\Component\http\Model;
 
+    use app\framework\Component\EventManager\EventManagerTrait;
     use app\framework\Component\StdLib\StdLibTrait;
     use app\framework\Component\Storage\StorageTrait;
     use app\framework\Component\Database\Medoo as Database;
 
 
     /**
-     * <code>Basic Model 1.1
+     * <code>Basic Model 1.2
      *   with Easy Database Access 1.2
      * </code>
      *
@@ -22,7 +23,7 @@
      */
     class Model //implements \ArrayAccess, \JsonSerializable
     {
-        use StorageTrait,StdLibTrait;
+        use StorageTrait,StdLibTrait,EventManagerTrait;
 
         /**
          * The table associated with the model.
