@@ -96,7 +96,19 @@
         private function assignData($data)
         {
             foreach ($data as $valueName => $dataSet) {
-                $this->TemplateEngine->assign($valueName, $dataSet);
+                if(explode(":", $dataSet)[1] != null){
+                    $viewName = explode(":", $dataSet)[1];
+
+                    switch (explode(":", $dataSet)[0]) {
+                        case "fetch":
+                                $this->TemplateEngine->assign($valueName, $this->TemplateEngine->fetch(self::validateViewName($viewName)));
+                            break;
+                    }
+
+                } else {
+
+                    $this->TemplateEngine->assign($valueName, $dataSet);
+                }
             }
         }
 
