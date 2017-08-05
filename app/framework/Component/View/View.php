@@ -103,6 +103,9 @@
                         case "fetch":
                                 $this->TemplateEngine->assign($valueName, $this->TemplateEngine->fetch(self::validateViewName($viewName)));
                             break;
+                        default:
+                            $this->TemplateEngine->assign($valueName, $dataSet);
+                            break;
                     }
 
                 } else {
