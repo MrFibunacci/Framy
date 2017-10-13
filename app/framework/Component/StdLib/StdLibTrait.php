@@ -14,15 +14,15 @@
         use StdObjectTrait,ValidatorTrait;
 
         /**
-         * Serializes the given array.
+         * Serializes the given value.
          *
-         * @param array $array Array to serialize.
+         * @param $value
          *
          * @return string
          */
-        protected static function serialize(array $array)
+        protected static function serialize($value)
         {
-            return serialize($array);
+            return serialize($value);
         }
 
         /**

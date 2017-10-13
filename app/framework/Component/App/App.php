@@ -57,18 +57,14 @@
 
         private function validateClass($class)
         {
-            if(strpos($class, '\\') !== false){
-                if(class_exists($class)){
+            foreach($this->defaultNamespaces as $namespace){
+                if(class_exists($namespace . "\\" . $class)){
+                    return $namespace . "\\" . $class;
+                } elseif (class_exists($class)) {
                     return $class;
-                } else {
-                    throw new \Exception("Class not found");
-                }
-            } else {
-                foreach($this->defaultNamespaces as $namespace){
-                    if(class_exists($namespace . "\\" . $class)){
-                        return $namespace . "\\" . $class;
-                    }
                 }
             }
+
+            throw new \Exception("Class not found. Maybe changing '/' to '\' helps.");
         }
     }

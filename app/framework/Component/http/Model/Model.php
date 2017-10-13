@@ -8,6 +8,7 @@
 
     namespace app\framework\Component\http\Model;
 
+    use app\framework\Component\Cookie\CookieTrait;
     use app\framework\Component\EventManager\EventManagerTrait;
     use app\framework\Component\StdLib\StdLibTrait;
     use app\framework\Component\Storage\StorageTrait;
@@ -23,7 +24,7 @@
      */
     class Model //implements \ArrayAccess, \JsonSerializable
     {
-        use StorageTrait,StdLibTrait,EventManagerTrait;
+        use StorageTrait,StdLibTrait,EventManagerTrait,CookieTrait;
 
         /**
          * The table associated with the model.
@@ -38,6 +39,13 @@
          * @var string
          */
         protected $connection;
+
+        /**
+         * Contains Cookie Instances in side an Array. Easy accessible by using the methods provided by CookieTrait.
+         *
+         * @var \app\framework\Component\Cookie\Cookie array
+         */
+        protected $cookieJar;
 
         /**
          * Contains the Database instance
