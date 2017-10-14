@@ -1,8 +1,8 @@
 <?php
 /**
- * Framey Framework
+ * Framy Framework
  *
- * @copyright Copyright Framey
+ * @copyright Copyright Framy
  * @Author Marco Bier <mrfibunacci@gmail.com>
  */
 
@@ -13,8 +13,8 @@
         private $defaultNamespaces = [
             '\app\custom\database\migrations',
             '\app\custom\database\seeders',
-            '\app\custom\http\Controller',
-            '\app\custom\http\Middleware',
+            '\app\custom\Http\Controller',
+            '\app\custom\Http\Middleware',
             '\app\custom\Models',
         ];
 
@@ -31,7 +31,7 @@
             if(! self::checkIfClassIsRegistered($class)){
                 self::registerNew($class);
             }
-            //2. get instance and call method
+
             return $this->callMethod($class, $method, $param);
         }
 

@@ -28,23 +28,23 @@
         'disks' => [
             'public' => [
                 'driver' => 'local',
-                'root' => realpath(dirname(__FILE__)."/../public"),
+                'root' => pathTo("/public"),
                 'visibility' => 'public',
             ],
 
             'view' => [
                 'driver' => 'local',
-                'root' => realpath(dirname(__FILE__).'/../storage/templates/')
+                'root' => pathTo('/storage/templates/')
             ],
 
             'viewCompiled' => [
                 'driver' => 'local',
-                'root' => realpath(dirname(__FILE__).'/../storage/templates/templates_c')
+                'root' => pathTo('/storage/templates/templates_c')
             ],
 
             'language' => [
                 'driver' => 'local',
-                'root' => realpath(dirname(__FILE__).'/../storage/lang/')
+                'root' => pathTo('/storage/lang/')
             ]
         ]
     ];

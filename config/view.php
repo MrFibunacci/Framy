@@ -10,7 +10,7 @@
         | the usual Framy view path has already been registered for you.
         |
         | You can add an disk from the filesystem or just an Absolute Path.
-        | e.g: "disk:view", realpath(dirname(__FILE__).'/who/reads/this/smells')
+        | e.g: "disk:view", pathTo('/who/reads/this/smells')
         |
         */
 

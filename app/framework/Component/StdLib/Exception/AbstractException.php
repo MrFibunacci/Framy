@@ -1,9 +1,9 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: MrFibunacci
- * Date: 25.12.2016
- * Time: 00:58
+ * Framy Framework
+ *
+ * @copyright Copyright Framy
+ * @Author Marco Bier <mrfibunacci@gmail.com>
  */
 
     namespace app\framework\Component\StdLib\Exception;

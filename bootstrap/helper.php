@@ -20,7 +20,7 @@
          */
         function view($view = null, $data = [], $mergeData = []){
             $View = new \app\framework\Component\View\View($view, $data);
-            $View->render();
+            return $View->render();
         }
     }
 
@@ -49,5 +49,17 @@
          */
         function url($path){
             return $_SERVER['HTTP_HOST'].$path;
+        }
+    }
+
+    if(! function_exists("pathTo")){
+        /**
+         * Easy function to get the path to the project + if you want an directory in it.
+         *
+         * @param null $path
+         * @return bool|string
+         */
+        function pathTo($path = null) {
+            return realpath(dirname(__FILE__)."/../".$path);
         }
     }

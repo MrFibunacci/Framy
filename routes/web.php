@@ -15,7 +15,7 @@
     $klein = new Klein();
 
     $klein->respond("GET", "/", function(){
-        return view("welcome");
+        return view("fetch:welcome");
     });
 
     // add more routes here ...

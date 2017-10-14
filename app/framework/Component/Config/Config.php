@@ -1,8 +1,9 @@
 <?php
 /**
- * Framey Framework
+ * Framy Framework
  *
- * @copyright Copyright Framey
+ * @copyright Copyright Framy
+ * @Author Marco Bier <mrfibunacci@gmail.com>
  */
 
     namespace app\framework\Component\Config;

@@ -87,7 +87,13 @@
         {
             try {
                 $this->assignData($this->data);
-                $this->TemplateEngine->display($this->view);
+
+                $expView = explode(":", $this->view);
+                if($expView[1] == null) {
+                    $this->TemplateEngine->display($this->view);
+                } elseif($expView[0] == "fetch") {
+                    return $this->TemplateEngine->fetch(self::validateViewName($expView[1]));
+                }
             } catch(\Exception $e) {
                 echo $e->getMessage();
             }

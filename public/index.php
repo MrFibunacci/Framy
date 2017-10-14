@@ -32,4 +32,3 @@
 
     include(realpath(__DIR__."/../routes/web.php"));
     include(realpath(__DIR__."/../routes/api.php"));
-
