@@ -25,14 +25,19 @@
 
         public function call($classMethod, $param = [])
         {
-            $class = self::validateClass(explode("@", $classMethod)[0]);
-            $method = explode("@", $classMethod)[1];
+            $method;
 
-            if(! self::checkIfClassIsRegistered($class)){
-                self::registerNew($class);
-            }
+            $this->registerNewClass($classMethod, $method);
 
-            return $this->callMethod($class, $method, $param);
+            return $this->callMethod($classMethod, $method, $param);
+        }
+
+        public function getClassInstance($className) 
+        {
+            $method;
+            $this->registerNewClass($className, $method);
+
+            return $this->Instance[$className];
         }
 
         private function checkIfClassIsRegistered($class)
@@ -45,9 +50,14 @@
             return false;
         }
 
-        private function registerNew($class)
+        private function registerNewClass(&$class, &$method)
         {
-            $this->Instances[$class] = new $class;
+            $method = explode("@", $class)[1];
+            $class = self::validateClass(explode("@", $class)[0]);
+
+            if(! self::checkIfClassIsRegistered($class)){
+                $this->Instances[$class] = new $class;
+            }
         }
 
         private function callMethod($class, $method, $param)
@@ -58,6 +68,7 @@
         private function validateClass($class)
         {
             foreach($this->defaultNamespaces as $namespace){
+                //var_dump($namespace . "\\" . $class);
                 if(class_exists($namespace . "\\" . $class)){
                     return $namespace . "\\" . $class;
                 } elseif (class_exists($class)) {
