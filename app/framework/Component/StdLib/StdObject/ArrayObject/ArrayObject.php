@@ -9,8 +9,6 @@
     namespace app\framework\Component\StdLib\StdObject\ArrayObject;
 
     use app\framework\Component\StdLib\StdObject\AbstractStdObject;
-    use app\framework\Component\StdLib\StdObject\ArrayObject\ManipulationTrait;
-    use app\framework\Component\StdLib\StdObject\ArrayObject\ValidatorTrait;
     use app\framework\Component\StdLib\StdObject\StdObjectTrait;
 
     class ArrayObject extends AbstractStdObject implements \ArrayAccess, \Countable, \IteratorAggregate
