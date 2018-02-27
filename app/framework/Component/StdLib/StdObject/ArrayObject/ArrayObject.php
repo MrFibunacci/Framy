@@ -19,7 +19,7 @@
 
         /**
          * @param      $value
-         * @param bool $makeArrayElemObj
+         * @param bool $makeArrayObj
          */
         public function __construct($value, $makeArrayElemObj = false)
         {
