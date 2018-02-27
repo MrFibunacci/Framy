@@ -21,7 +21,7 @@
          * @param      $value
          * @param bool $makeArrayObj
          */
-        public function __construct($value, $makeArrayElemObj = false)
+        public function __construct($value, $makeArrayObj = false)
         {
             if(is_array($value)){
                 $this->val($value);
