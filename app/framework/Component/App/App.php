@@ -25,7 +25,7 @@
 
         public function call($classMethod, $param = [])
         {
-            $method;
+            $method = null;
 
             $this->registerNewClass($classMethod, $method);
 
@@ -34,10 +34,10 @@
 
         public function getClassInstance($className) 
         {
-            $method;
+            $method = null;
             $this->registerNewClass($className, $method);
 
-            return $this->Instance[$className];
+            return $this->Instances[$className];
         }
 
         private function checkIfClassIsRegistered($class)

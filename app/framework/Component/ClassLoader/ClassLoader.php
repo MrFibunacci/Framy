@@ -1,9 +1,9 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: MrFibunacci
- * Date: 16.01.2017
- * Time: 01:29
+ * Framy Framework
+ *
+ * @copyright Copyright Framy
+ * @Author Marco Bier <mrfibunacci@gmail.com>
  */
 
     namespace app\framework\Component\ClassLoader;

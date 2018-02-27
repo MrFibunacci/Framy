@@ -6,7 +6,7 @@
  *
  * Copyright 2017, Angel Lai
  * Released under the MIT license
- * Changed by Marco Bier <mrfibunacci@gmail.com>
+ * Edited by Marco Bier <mrfibunacci@gmail.com>
  */
 
 namespace app\framework\Component\Database;

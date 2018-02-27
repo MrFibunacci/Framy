@@ -31,8 +31,8 @@
          *
          * @param string $classMethod The class name(if in \app\custom\ namespace) or the "namespace+className@methodToCall"
          */
-        function app($classMethod){
-            return $GLOBALS["App"]->call($classMethod);
+        function app($classMethod, $param = null){
+            return $GLOBALS["App"]->call($classMethod, $param);
         }
     }
 
@@ -61,5 +61,26 @@
          */
         function pathTo($path = null) {
             return realpath(dirname(__FILE__)."/../".$path);
+        }
+    }
+
+    if(! function_exists("get_string_between")){
+        /**
+         * This is a handy little function to strip out a string between
+         * two specified pieces of text. This could be used to parse
+         * XML text, bbCode, or any other delimited code/text for that matter.
+         *
+         * @param $string
+         * @param $start
+         * @param $end
+         * @return bool|string
+         */
+        function getStringBetween($string, $start, $end){
+            $string = ' ' . $string;
+            $ini = strpos($string, $start);
+            if ($ini == 0) return '';
+            $ini += strlen($start);
+            $len = strpos($string, $end, $ini) - $ini;
+            return substr($string, $ini, $len);
         }
     }

@@ -1,9 +1,9 @@
 <?php
 /**
- * Created by IntelliJ IDEA.
- * User: MrFibunacci
- * Date: 20.12.2016
- * Time: 01:42
+ * Framy Framework
+ *
+ * @copyright Copyright Framy
+ * @Author Marco Bier <mrfibunacci@gmail.com>
  */
 
     namespace app\framework\Component\Storage\Disk;
