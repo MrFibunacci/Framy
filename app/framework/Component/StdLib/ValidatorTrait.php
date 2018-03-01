@@ -7,6 +7,7 @@
  */
 
     namespace app\framework\Component\StdLib;
+
     use app\framework\Component\StdLib\StdObject\StdObjectWrapper;
 
     /**

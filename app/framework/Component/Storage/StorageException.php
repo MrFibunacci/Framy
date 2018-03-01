@@ -10,7 +10,8 @@
 
     use app\framework\Component\StdLib\Exception\AbstractException;
 
-    class StorageException extends AbstractException {
+    class StorageException extends AbstractException
+    {
         const FILE_NOT_FOUND = 101;
         const FAILED_TO_READ = 102;
         const DRIVER_DOES_NOT_SUPPORT_TOUCH = 103;

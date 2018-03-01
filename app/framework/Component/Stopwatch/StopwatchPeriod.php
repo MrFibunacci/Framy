@@ -11,7 +11,6 @@
 
     /**
      * Represents an Period for an Event.
-
      *
      * @package app\framework\Component\Stopwatch
      */

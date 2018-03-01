@@ -7,12 +7,12 @@
  */
 
     namespace app\framework\Component\StdLib;
-    use app\framework\Component\StdLib\ValidatorTrait;
+
     use app\framework\Component\StdLib\StdObject\StdObjectTrait;
 
     /**
      * Standard Library Trait
-     * Some usefull functions
+     * Some useful functions
      *
      * @package app\framework\Component\StdLib
      */

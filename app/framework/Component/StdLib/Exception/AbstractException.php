@@ -15,21 +15,25 @@
         use ValidatorTrait;
 
         /**
-         * Bad function call
+         * Bad function call.
          */
         const MSG_BAD_FUNC_CALL = 1;
+
         /**
          * Bad method call.
          */
         const MSG_BAD_METHOD_CALL = 2;
+
         /**
          * Invalid argument provided. %s must be type of %s.
          */
         const MSG_INVALID_ARG = 3;
+
         /**
          * Invalid argument provided. %s must be %s.
          */
         const MSG_INVALID_ARG_LENGTH = 4;
+
         /**
          * Defined value for %s argument if out of the valid range.
          */

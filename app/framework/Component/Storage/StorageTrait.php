@@ -18,10 +18,9 @@
          /**
           * Get storage
           *
-          * @param string $storageName Storage name
-          *
-          * @throws \app\framework\Component\Storage\Storage
+          * @param $storageName
           * @return Storage
+          * @throws StorageException
           */
          protected static function storage($storageName)
          {
