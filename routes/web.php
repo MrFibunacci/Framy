@@ -1,6 +1,5 @@
 <?php
-    /*
-    |--------------------------------------------------------------------------
+    /*-------------------------------------------------------------------------
     | Web Routes
     |--------------------------------------------------------------------------
     |
@@ -10,8 +9,14 @@
     |
     */
 
-    use \app\framework\Component\Route\Route;
-    $Route = new Route;
+    use \app\framework\Component\Route\Klein\Klein;
 
-$Route->get("/da", "Test@method");
-$Route->get("/", "Test@method");
+    $klein = new Klein();
+
+    $klein->respond("GET", "/", function(){
+        return view("fetch:welcome");
+    });
+
+    // add more routes here ...
+
+    $klein->dispatch();
