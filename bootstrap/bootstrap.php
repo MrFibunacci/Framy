@@ -9,7 +9,7 @@
     | The house made Class auto loader.
     |
     */
-    require("../app/framework/Component/ClassLoader/ClassLoader.php");
+    require(ROOT_PATH."/app/framework/Component/ClassLoader/ClassLoader.php");
 
     $autoLoader = new \app\framework\Component\ClassLoader\ClassLoader();
     $autoLoader->register();
