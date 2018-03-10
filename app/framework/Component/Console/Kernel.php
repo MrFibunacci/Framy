@@ -10,24 +10,47 @@
 
     class Kernel
     {
+        /**
+         * @var array
+         */
         private $commands = array();
 
         private $defaultCommandDirectory = [
-            ROOT_PATH.'/app/framework/Component/Console/BaseCommands'
+            ROOT_PATH.'/app/framework/Component/Console/Command'
         ];
-
-        private $input;
 
         /**
          * Kernel constructor.
+         *
          */
-        public function __construct(ArgvInput $input)
+        public function __construct()
         {
-            $this->input = $input;
             // Load the default commands
             $this->loadDefaultCommands();
 
             // and the custom made
+        }
+
+        /**
+         * Execute command and show its output if required.
+         *
+         * @param ArgvInput $input
+         */
+        public function handle(ArgvInput $input)
+        {
+            foreach($this->getCommands() as $command) {
+                if($command->getName() == $input->getCommandName()) {
+                    echo "test\n";
+                }
+            }
+        }
+
+        /**
+         * @return array
+         */
+        public function getCommands()
+        {
+            return $this->commands;
         }
 
         private function loadDefaultCommands()

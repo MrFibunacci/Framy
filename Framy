@@ -12,7 +12,7 @@
     require(__DIR__."/bootstrap/bootstrap.php");
 
     /*---------------------------------------
-    | Run Framys CLI Application
+    | Run Framy's CLI Application
     |----------------------------------------
     |
     | When we run the CLI Application, the current CLI command will be
@@ -20,6 +20,10 @@
     |
     */
 
-    $input = new \app\framework\Component\Console\ArgvInput();
-    $CLI = new \app\framework\Component\Console\Kernel($input);
-    var_dump($CLI);
+    $Kernel = new \app\framework\Component\Console\Kernel();
+
+    $Kernel->handle(
+        new \app\framework\Component\Console\Input\ArgvInput()
+    );
+
+    var_dump($Kernel);

@@ -1,6 +1,7 @@
 **/*~
 
 /storage/templates/templates_c/
+/storage/logs/
 
 .classpath
 .project
