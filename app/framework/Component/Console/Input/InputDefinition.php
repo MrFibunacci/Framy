@@ -20,6 +20,7 @@
         private $hasOptional;
         private $requiredCount;
         private $options;
+        private $shortcuts;
 
         /**
          * @param array $definition An array of InputArgument and InputOption instance
@@ -233,7 +234,7 @@
         /**
          * @return array An array of all default values
          */
-        public function getOptionDefault()
+        public function getOptionDefaults()
         {
             $values = array();
             foreach ($this->options as $option) {
