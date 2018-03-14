@@ -154,12 +154,13 @@
         /**
          * Gets the default values.
          *
-         * @return array An array of default valuess
+         * @return array An array of default values
          */
         public function getArgumentDefaults()
         {
             $values = array();
             foreach($this->arguments as $argument) {
+                /**@var $argument InputArgument*/
                 $values[$argument->getName()] = $argument->getDefault();
             }
 
@@ -203,8 +204,9 @@
          */
         public function addOption($option)
         {
+            /**@var $option InputOption*/
             if(isset($this->options[$option->getName()]) && !$option->equals($this->options[$option->getName()]))
-                throw new \LogicException(sprintf('An option named "%s" aleady exists.', $option->getName()));
+                throw new \LogicException(sprintf('An option named "%s" already exists.', $option->getName()));
 
             $this->options[$option->getName()] = $option;
         }
@@ -238,9 +240,99 @@
         {
             $values = array();
             foreach ($this->options as $option) {
+                /**@var $option InputOption*/
                 $values[$option->getName()] = $option->getDefault();
             }
 
             return $values;
+        }
+
+        /**
+         * Returns true if an InputOption object exists by shortcut.
+         *
+         * @param string $name The InputOption shortcut
+         *
+         * @return bool true if the InputOption object exists, false otherwise
+         */
+        public function hasShortcut($name)
+        {
+            return isset($this->shortcuts[$name]);
+        }
+
+        /**
+         * Gets an InputOption by shortcut.
+         *
+         * @param string $shortcut The Shortcut name
+         *
+         * @return InputOption An InputOption object
+         */
+        public function getOptionForShortcut($shortcut)
+        {
+            return $this->getOption($this->shortcutToName($shortcut));
+        }
+
+        /**
+         * Returns the InputOption name given a shortcut.
+         *
+         * @param string $shortcut The shortcut
+         *
+         * @return string The InputOption name
+         *
+         * @throws \InvalidArgumentException When option given does not exist
+         */
+        private function shortcutToName($shortcut)
+        {
+            if (!isset($this->shortcuts[$shortcut]))
+                throw new \InvalidArgumentException(sprintf('The "-%s" option does not exist.', $shortcut));
+
+            return $this->shortcuts[$shortcut];
+        }
+
+        /**
+         * Gets the synopsis.
+         *
+         * @param bool $short Whether to return the short version (with options folded) or not
+         *
+         * @return string The synopsis
+         */
+        public function getSynopsis($short = false)
+        {
+            $elements = array();
+            if ($short && $this->getOptions()) {
+                $elements[] = '[options]';
+            } elseif (!$short) {
+                foreach ($this->getOptions() as $option) {
+                    /**@var $option InputOption*/
+                    $value = '';
+                    if ($option->acceptValue()) {
+                        $value = sprintf(
+                            ' %s%s%s',
+                            $option->isValueOptional() ? '[' : '',
+                            strtoupper($option->getName()),
+                            $option->isValueOptional() ? ']' : ''
+                        );
+                    }
+                    $shortcut = $option->getShortcut() ? sprintf('-%s|', $option->getShortcut()) : '';
+                    $elements[] = sprintf('[%s--%s%s]', $shortcut, $option->getName(), $value);
+                }
+            }
+            if (count($elements) && $this->getArguments())
+                $elements[] = '[--]';
+
+            foreach ($this->getArguments() as $argument) {
+                $element = '<'.$argument->getName().'>';
+
+                if (!$argument->isRequired()) {
+                    $element = '['.$element.']';
+                } elseif ($argument->isArray()) {
+                    $element = $element.' ('.$element.')';
+                }
+
+                if ($argument->isArray())
+                    $element .= '...';
+
+                $elements[] = $element;
+            }
+            return implode(' ', $elements);
         }
     }

@@ -13,7 +13,7 @@
      *
      * @package app\framework\Component\Console\Input
      */
-    abstract class Input
+    abstract class Input implements InputInterface
     {
         protected $definition;
         protected $options = array();
@@ -154,5 +154,17 @@
         public function hasOption($name)
         {
             return $this->definition->hasOption($name);
+        }
+
+        /**
+         * Escapes a token through escapeshellarg if it contains unsafe chars.
+         *
+         * @param string $token
+         *
+         * @return string
+         */
+        public function escapeToken($token)
+        {
+            return preg_match('{^[\w-]+$}', $token) ? $token : escapeshellarg($token);
         }
     }

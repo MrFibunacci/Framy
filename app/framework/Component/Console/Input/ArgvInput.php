@@ -56,14 +56,6 @@
             parent::__construct($definition);
         }
 
-        /**
-         * @return array
-         */
-        public function getArguments()
-        {
-            return $this->arguments;
-        }
-
         protected function parse()
         {
             $parseOptions = true;
@@ -114,9 +106,9 @@
         {
             $len = strlen($name);
             for ($i = 0; $i < $len; ++$i) {
-                if (!$this->definition->hasShortcut($name[$i])) {
+                if (!$this->definition->hasShortcut($name[$i]))
                     throw new \RuntimeException(sprintf('The "-%s" option does not exist.', $name[$i]));
-                }
+
                 $option = $this->definition->getOptionForShortcut($name[$i]);
                 if ($option->acceptValue()) {
                     $this->addLongOption($option->getName(), $i === $len - 1 ? null : substr($name, $i + 1));
@@ -150,7 +142,7 @@
          *
          * @param string $token The current token
          *
-         * @throws RuntimeException When too many arguments are given
+         * @throws \RuntimeException When too many arguments are given
          */
         private function parseArgument($token)
         {
@@ -179,13 +171,13 @@
          * @param string $shortcut The short option key
          * @param mixed  $value    The value for the option
          *
-         * @throws RuntimeException When option given doesn't exist
+         * @throws \RuntimeException When option given doesn't exist
          */
         private function addShortOption($shortcut, $value)
         {
-            if (!$this->definition->hasShortcut($shortcut)) {
+            if (!$this->definition->hasShortcut($shortcut))
                 throw new \RuntimeException(sprintf('The "-%s" option does not exist.', $shortcut));
-            }
+
             $this->addLongOption($this->definition->getOptionForShortcut($shortcut)->getName(), $value);
         }
 
@@ -195,17 +187,19 @@
          * @param string $name  The long option key
          * @param mixed  $value The value for the option
          *
-         * @throws RuntimeException When option given doesn't exist
+         * @throws \RuntimeException When option given doesn't exist
          */
         private function addLongOption($name, $value)
         {
-            if (!$this->definition->hasOption($name)) {
+            if (!$this->definition->hasOption($name))
                 throw new \RuntimeException(sprintf('The "--%s" option does not exist.', $name));
-            }
+
+            /**@var $option InputOption*/
             $option = $this->definition->getOption($name);
-            if (null !== $value && !$option->acceptValue()) {
+
+            if (null !== $value && !$option->acceptValue())
                 throw new \RuntimeException(sprintf('The "--%s" option does not accept a value.', $name));
-            }
+
             if (in_array($value, array('', null), true) && $option->acceptValue() && count($this->parsed)) {
                 // if option accepts an optional or mandatory argument
                 // let's see if there is one provided
@@ -216,14 +210,16 @@
                     array_unshift($this->parsed, $next);
                 }
             }
+
             if (null === $value) {
-                if ($option->isValueRequired()) {
+                if ($option->isValueRequired())
                     throw new \RuntimeException(sprintf('The "--%s" option requires a value.', $name));
-                }
-                if (!$option->isArray() && !$option->isValueOptional()) {
+
+                if (!$option->isArray() && !$option->isValueOptional())
                     $value = true;
-                }
+
             }
+
             if ($option->isArray()) {
                 $this->options[$name][] = $value;
             } else {

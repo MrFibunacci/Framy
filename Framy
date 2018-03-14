@@ -26,4 +26,4 @@
         new \app\framework\Component\Console\Input\ArgvInput()
     );
 
-    var_dump($Kernel);
+    //var_dump($Kernel);

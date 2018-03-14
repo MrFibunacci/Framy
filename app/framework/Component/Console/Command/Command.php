@@ -8,6 +8,9 @@
 
     namespace app\framework\Component\Console\Command;
 
+    use app\framework\Component\Console\Input\InputDefinition;
+    use app\framework\Component\Console\Input\InputInterface;
+
     /**
      * Base command class.
      *
@@ -15,42 +18,47 @@
      */
     class Command
     {
-        /**
-         * Name of the command
-         *
-         * @var string
-         */
         private $name;
-
-        /**
-         * signature of the command.
-         *
-         * @var string
-         */
         private $signature;
-
-        /**
-         * Description of the command.
-         *
-         * @var string
-         */
         private $description;
-
-        /**
-         * Help text of the command.
-         *
-         * @var string
-         */
+        private $definition;
+        private $ignoreValidationErrors;
         private $help;
-
         private $code;
 
         /**
          * Command constructor.
+         *
+         * @param $name
          */
-        public function __construct()
+        public function __construct(string $name = null)
         {
+            if(is_null($name))
+                $this->setName($name);
 
+            $this->definition = new InputDefinition();
+
+            $this->configure();
+        }
+
+        /**
+         * Configures the current command.
+         */
+        protected function configure()
+        {
+        }
+
+        /**
+         * Interacts with the user.
+         *
+         * This method is executed before the InputDefinition is validated.
+         * This means that this is the only place where the command can
+         * interactively ask for values of missing required arguments.
+         *
+         * @param InputInterface $input
+         */
+        protected function interact(InputInterface $input)
+        {
         }
 
         protected function execute()
@@ -58,17 +66,41 @@
             throw new \LogicException('You must override the execute() method in the concrete command class.');
         }
 
+
         /**
          * Runs the command.
          *
          * The code to execute is either defined directly with the
          * setCode() method or by overriding the execute() method in a sub-class.
          *
-         * @param $input
+         * @param InputInterface $input
+         * @return int
+         * @throws \Exception
          */
-        public function run($input)
+        public function run(InputInterface $input)
         {
+            // bind the input against the command specific arguments/options
+            try {
+                $input->bind($this->definition);
+            } catch (\Exception $e) {
+                if (!$this->ignoreValidationErrors) {
+                    throw $e;
+                }
+            }
 
+            if ($input->isInteractive()) {
+                $this->interact($input);
+            }
+
+            $input->validate();
+
+            if ($this->code) {
+                $statusCode = call_user_func($this->code, $input);
+            } else {
+                $statusCode = $this->execute($input);
+            }
+
+            return is_numeric($statusCode) ? (int) $statusCode : 0;
         }
 
         /**
@@ -108,6 +140,8 @@
          */
         public function setName($name)
         {
+            $this->validateName($name);
+
             $this->name = $name;
         }
 
@@ -157,6 +191,33 @@
         public function setHelp($help)
         {
             $this->help = $help;
+        }
+
+        /**
+         * Sets an array of argument and option instances.
+         *
+         * @param array|InputDefinition $definition An array of argument and option instances or a definition instance
+         *
+         * @return $this
+         */
+        public function setDefinition($definition)
+        {
+            if ($definition instanceof InputDefinition) {
+                $this->definition = $definition;
+            } else {
+                $this->definition->setDefinition($definition);
+            }
+            return $this;
+        }
+
+        /**
+         * Gets the InputDefinition attached to this Command.
+         *
+         * @return InputDefinition An InputDefinition instance
+         */
+        public function getDefinition()
+        {
+            return $this->definition;
         }
 
         /**

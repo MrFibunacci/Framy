@@ -21,6 +21,7 @@
         const VALUE_IS_ARRAY = 8;
 
         private $name;
+        private $shortcut;
         private $mode;
         private $default;
         private $description;
@@ -28,14 +29,32 @@
         /**
          * InputOption constructor.
          * @param $name
+         * @param $shortcut
          * @param $mode
          * @param $default
          * @param $description
          */
-        public function __construct($name,int $mode = null, $default = null, string $description = '')
+        public function __construct(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null)
         {
             if(empty($name))
                 throw new \InvalidArgumentException('An option name cannot be empty.');
+
+            if (empty($shortcut))
+                $shortcut = null;
+
+
+            if (null !== $shortcut) {
+                if (is_array($shortcut))
+                    $shortcut = implode('|', $shortcut);
+
+                $shortcuts = preg_split('{(\|)-?}', ltrim($shortcut, '-'));
+                $shortcuts = array_filter($shortcuts);
+                $shortcut = implode('|', $shortcuts);
+
+                if (empty($shortcut))
+                    throw new \InvalidArgumentException('An option shortcut cannot be empty.');
+
+            }
 
             if(null === $mode) {
                 $mode = self::VALUE_NONE;
@@ -43,9 +62,26 @@
                 throw new \InvalidArgumentException(sprintf('Option mode "%s" is not valid.', $mode));
             }
 
-            $this->name = $name;
-            $this->mode = $mode;
+            $this->name        = $name;
+            $this->shortcut    = $shortcut;
+            $this->mode        = $mode;
             $this->description = $description;
+
+            if ($this->isArray() && !$this->acceptValue()) {
+                throw new \InvalidArgumentException('Impossible to have an option mode VALUE_IS_ARRAY if the option does not accept a value.');
+            }
+
+            $this->setDefault($default);
+        }
+
+        /**
+         * Returns the option shortcut.
+         *
+         * @return string The shortcut
+         */
+        public function getShortcut()
+        {
+            return $this->shortcut;
         }
 
         /**
@@ -148,6 +184,7 @@
         public function equals(InputOption $option)
         {
             return $option->getName() === $this->getName()
+                && $option->getShortcut() === $this->getShortcut()
                 && $option->getDefault() === $this->getDefault()
                 && $option->getDescription() === $this->getDescription()
                 && $option->isArray() === $this->isArray()
