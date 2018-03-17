@@ -33,7 +33,7 @@
          */
         public function __construct(string $name = null)
         {
-            if(is_null($name))
+            if(!is_null($name))
                 $this->setName($name);
 
             $this->definition = new InputDefinition();

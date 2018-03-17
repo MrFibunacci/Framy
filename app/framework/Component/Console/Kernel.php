@@ -9,6 +9,7 @@
     namespace app\framework\Component\Console;
 
     use app\framework\Component\Console\Command\Command;
+    use app\framework\Component\Console\CommandLoader\CommandLoader;
     use app\framework\Component\Console\Command\HelpCommand;
     use app\framework\Component\Console\Exception\CommandNotFoundException;
     use app\framework\Component\Console\Input\ArgvInput;
@@ -20,6 +21,7 @@
         private $singleCommand;
         private $defaultCommand;
         private $isInitialized;
+        private $commandLoader;
 
         /**
          * Kernel constructor.
@@ -30,12 +32,11 @@
             $this->defaultCommand = 'list';
             $this->isInitialized = false;
 
-
-            // TODO: write command loader!
-            // Load the default commands
-            //$this->loadDefaultCommands();
-
-            // and the custom made
+            try {
+                $this->commandLoader = new CommandLoader();
+            } catch (\Exception $e) {
+                echo "Some shit went wrong: ".$e->getMessage()."\n";
+            }
         }
 
         /**
@@ -46,7 +47,7 @@
         public function handle(ArgvInput $input)
         {
             try {
-                $this->run($input);
+                //$this->run($input);
             } catch (\Exception $e) {
                 echo $e->getMessage();
             }
@@ -69,12 +70,13 @@
 
             try {
                 $command = $this->find($name);
-            } catch (\Throwable $e) {
-                //TODO: do important exception stuff
-            }
 
-            // run the current command
-            $exitCode = $command->run($input);
+                // run the current command
+                $exitCode = $command->run($input);
+
+            } catch (\Exception $e) {
+                throw $e;
+            }
 
             return $exitCode;
         }
@@ -176,25 +178,6 @@
         {
             return [new HelpCommand()];
         }
-
-        /*private function loadDefaultCommands()
-        {
-            foreach($this->defaultCommandDirectory as $directory) {
-                $files = glob($directory.'/*.php');
-                foreach($files as $file) {
-                    $this->load($file);
-                }
-            }
-        }
-
-        private function load($file)
-        {
-            $file = explode(ROOT_PATH."/", explode('.php', $file)[0])[1];
-            $file = str_replace('/', '\\', $file);
-            if(class_exists($file)) {
-                $this->commands[] = new $file;
-            }
-        }*/
 
         private function init()
         {
