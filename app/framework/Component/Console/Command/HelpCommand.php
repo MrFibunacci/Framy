@@ -9,17 +9,18 @@
     namespace app\framework\Component\Console\Command;
 
     use app\framework\Component\Console\Input\InputArgument;
+    use app\framework\Component\Console\Input\InputInterface;
     use app\framework\Component\Console\Input\InputOption;
 
     class HelpCommand extends Command
     {
+        private $command;
+
         protected function configure()
         {
             $this->setName('help');
             $this->setDefinition([
-                new InputArgument('command_name', InputArgument::OPTIONAL, 'The command name', 'help'),
-                new InputOption('format', null, InputOption::VALUE_REQUIRED, 'The output format (txt, xml, json, or md)', 'txt'),
-                new InputOption('raw', null, InputOption::VALUE_NONE, 'To output raw command help'),
+                new InputArgument('command_name', InputArgument::OPTIONAL, 'The command name', 'help')
             ]);
             $this->setDescription('Displays help for a command');
             $this->setHelp(<<<'EOF'
@@ -30,6 +31,26 @@ You can also output the help in other formats by using the <comment>--format</co
 To display the list of available commands, please use the <info>list</info> command.
 EOF
                 );
+        }
+
+        public function setCommand(Command $command)
+        {
+            $this->command = $command;
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        protected function execute(InputInterface $input)
+        {
+            if (null === $this->command) {
+                $this->command = $this->getKernel()->find($input->getArgument('command_name'));
+            }
+
+            //TODO: give it to some sort of output parser to create a beautiful output
+            echo $this->command->getHelp();
+
+            $this->command = null;
         }
 
 

@@ -11,6 +11,13 @@
     /**
      * A InputDefinition represents a set of valid command line arguments and options.
      *
+     * Usage:
+     *
+     *     $definition = new InputDefinition(array(
+     *       new InputArgument('name', InputArgument::REQUIRED),
+     *       new InputOption('foo', 'f', InputOption::VALUE_REQUIRED),
+     *     ));
+     *
      * @package app\framework\Component\Console\Input
      */
     class InputDefinition
@@ -62,7 +69,7 @@
          */
         public function addArguments($arguments = array())
         {
-            if($arguments === null) {
+            if($arguments !== null) {
                 foreach($arguments as $argument) {
                     $this->addArgument($argument);
                 }
@@ -105,7 +112,7 @@
          */
         public function getArgument($name)
         {
-            if($this->hasArgument($name))
+            if(!$this->hasArgument($name))
                 throw new \InvalidArgumentException(sprintf('The "%s" argument does not exist.', $name));
 
             $arguments = is_int($name) ? array_values($this->arguments) : $this->arguments;

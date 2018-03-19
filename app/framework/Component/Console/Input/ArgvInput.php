@@ -51,15 +51,20 @@
 
             // strip the application name
             array_shift($argv);
+
             $this->tokens = $argv;
 
             parent::__construct($definition);
         }
 
+        /**
+         * {@inheritdoc}
+         */
         protected function parse()
         {
             $parseOptions = true;
             $this->parsed = $this->tokens;
+            array_shift($this->parsed);
             while (null !== $token = array_shift($this->parsed)) {
                 if ($parseOptions && '' == $token) {
                     $this->parseArgument($token);
@@ -147,15 +152,18 @@
         private function parseArgument($token)
         {
             $c = count($this->arguments);
+
             // if input is expecting another argument, add it
             if ($this->definition->hasArgument($c)) {
                 $arg = $this->definition->getArgument($c);
                 $this->arguments[$arg->getName()] = $arg->isArray() ? array($token) : $token;
-                // if last argument isArray(), append token to last argument
+
+            // if last argument isArray(), append token to last argument
             } elseif ($this->definition->hasArgument($c - 1) && $this->definition->getArgument($c - 1)->isArray()) {
                 $arg = $this->definition->getArgument($c - 1);
                 $this->arguments[$arg->getName()][] = $token;
-                // unexpected argument
+
+            // unexpected argument
             } else {
                 $all = $this->definition->getArguments();
                 if (count($all)) {

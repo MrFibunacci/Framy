@@ -47,7 +47,7 @@
         public function handle(ArgvInput $input)
         {
             try {
-                //$this->run($input);
+                $this->run($input);
             } catch (\Exception $e) {
                 echo $e->getMessage();
             }
@@ -68,12 +68,15 @@
 
             $name = $this->getCommandName($input);
 
+            // if no command in called, call default command
+            if($name == null)
+                $name = $this->defaultCommand;
+
             try {
                 $command = $this->find($name);
 
                 // run the current command
                 $exitCode = $command->run($input);
-
             } catch (\Exception $e) {
                 throw $e;
             }
@@ -85,6 +88,14 @@
         {
             $this->init();
 
+            $command->setKernel($this);
+
+            if (!$command->isEnabled()) {
+                $command->setKernel(null);
+
+                return;
+            }
+
             if (null === $command->getDefinition()) {
                 throw new \LogicException(sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', get_class($command)));
             }
@@ -94,10 +105,6 @@
             }
 
             $this->commands[$command->getName()] = $command;
-
-            /*foreach ($command->getAliases() as $alias) {
-                $this->commands[$alias] = $command;
-            }*/
 
             return $command;
         }
@@ -113,7 +120,7 @@
         {
             $this->init();
 
-            return isset($this->commands[$name]);
+            return isset($this->commands[$name]) && $this->commandLoader->has($name);
         }
 
         /**
@@ -129,10 +136,13 @@
         {
             $this->init();
 
-            if(!$this->has($name))
+            if(!$this->has($name) && $this->commandLoader->has($name))
                 throw new CommandNotFoundException(sprintf('The command "%s" does not exist.', $name));
 
-            return $this->commands[$name];
+            if(isset($this->commands[$name]))
+                return $this->commands[$name];
+
+            return $this->commandLoader->get($name);
         }
 
         /**
@@ -149,7 +159,8 @@
          */
         public function find($name)
         {
-            //TODO: write awesome function!
+            //TODO: implement: Contrary to get, this command tries to find the best match if you give it an abbreviation of a name or alias.
+            return $this->get($name);
         }
 
         /**

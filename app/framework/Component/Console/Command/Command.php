@@ -19,6 +19,7 @@
     class Command
     {
         private $name;
+        private $kernel;
         private $signature;
         private $description;
         private $definition;
@@ -49,6 +50,19 @@
         }
 
         /**
+         * Checks whether the command is enabled or not in the current environment.
+         *
+         * Override this to check for x or y and return false if the command can not
+         * run properly under the current conditions.
+         *
+         * @return bool
+         */
+        public function isEnabled()
+        {
+            return true;
+        }
+
+        /**
          * Interacts with the user.
          *
          * This method is executed before the InputDefinition is validated.
@@ -61,11 +75,26 @@
         {
         }
 
-        protected function execute()
+        protected function execute(InputInterface $input)
         {
             throw new \LogicException('You must override the execute() method in the concrete command class.');
         }
 
+        /**
+         * @return mixed
+         */
+        public function getKernel()
+        {
+            return $this->kernel;
+        }
+
+        /**
+         * @param mixed $kernel
+         */
+        public function setKernel($kernel)
+        {
+            $this->kernel = $kernel;
+        }
 
         /**
          * Runs the command.
