@@ -166,12 +166,15 @@
 
         /**
          * @param string $name
+         * @return $this
          */
         public function setName($name)
         {
             $this->validateName($name);
 
             $this->name = $name;
+
+            return $this;
         }
 
         /**
@@ -200,10 +203,13 @@
 
         /**
          * @param string $description
+         * @return $this
          */
         public function setDescription($description)
         {
             $this->description = $description;
+
+            return $this;
         }
 
         /**
