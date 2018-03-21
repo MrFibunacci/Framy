@@ -10,6 +10,7 @@
 
     use app\framework\Component\Console\Input\InputDefinition;
     use app\framework\Component\Console\Input\InputInterface;
+    use app\framework\Component\Console\Output\ConsoleOutput;
 
     /**
      * Base command class.
@@ -75,7 +76,7 @@
         {
         }
 
-        protected function execute(InputInterface $input)
+        protected function execute(InputInterface $input, ConsoleOutput $output)
         {
             throw new \LogicException('You must override the execute() method in the concrete command class.');
         }
@@ -103,10 +104,11 @@
          * setCode() method or by overriding the execute() method in a sub-class.
          *
          * @param InputInterface $input
+         * @param ConsoleOutput $output
          * @return int
          * @throws \Exception
          */
-        public function run(InputInterface $input)
+        public function run(InputInterface $input, ConsoleOutput $output)
         {
             // bind the input against the command specific arguments/options
             try {
@@ -126,7 +128,7 @@
             if ($this->code) {
                 $statusCode = call_user_func($this->code, $input);
             } else {
-                $statusCode = $this->execute($input);
+                $statusCode = $this->execute($input, $output);
             }
 
             return is_numeric($statusCode) ? (int) $statusCode : 0;

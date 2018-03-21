@@ -14,6 +14,10 @@
     use app\framework\Component\Console\Exception\CommandNotFoundException;
     use app\framework\Component\Console\Input\ArgvInput;
     use app\framework\Component\Console\Input\InputInterface;
+    use app\framework\Component\Console\Output\ConsoleOutput;
+    use app\framework\Component\Console\Output\ConsoleOutputInterface;
+    use app\framework\Component\Console\Output\Formatter\OutputFormatter;
+    use app\framework\Component\Console\Output\OutputInterface;
 
     class Kernel
     {
@@ -22,6 +26,8 @@
         private $defaultCommand;
         private $isInitialized;
         private $commandLoader;
+        private $catchExceptions = true;
+        private $terminal;
 
         /**
          * Kernel constructor.
@@ -34,6 +40,8 @@
 
             try {
                 $this->commandLoader = new CommandLoader();
+                $this->terminal = new Terminal();
+                dd($this->terminal->getWidth());
             } catch (\Exception $e) {
                 echo "Some shit went wrong: ".$e->getMessage()."\n";
             }
@@ -42,12 +50,13 @@
         /**
          * Execute command and show its output if required.
          *
-         * @param ArgvInput $input
+         * @param ArgvInput       $input
+         * @param OutputInterface $output
          */
-        public function handle(ArgvInput $input)
+        public function handle(ArgvInput $input, OutputInterface $output)
         {
             try {
-                $this->run($input);
+                $this->run($input, $output);
             } catch (\Exception $e) {
                 echo $e->getMessage();
             }
@@ -56,15 +65,19 @@
         /**
          * Runs the current application.
          *
-         * @param InputInterface $input
+         * @param InputInterface  $input
+         * @param OutputInterface $output
          * @return int 0 if everything went fine, or an error code
          *
          * @throws \Exception When running fails. Bypass this when {@link setCatchExceptions()}.
          */
-        public function run(InputInterface $input = null)
+        public function run(InputInterface $input = null, OutputInterface $output = null)
         {
             if($input === null)
                 $input = new ArgvInput();
+
+            if($output === null)
+                $output = new ConsoleOutput();
 
             $name = $this->getCommandName($input);
 
@@ -72,13 +85,37 @@
             if($name == null)
                 $name = $this->defaultCommand;
 
+            /*$renderException = function ($e) use ($output) {
+                if (!$e instanceof \Exception) {
+                        $e = class_exists(FatalThrowableError::class) ? new FatalThrowableError($e) : new \ErrorException($e->getMessage(), $e->getCode(), E_ERROR, $e->getFile(), $e->getLine());
+                }
+
+                if ($output instanceof ConsoleOutputInterface) {
+                    $this->renderException($e, $output->getErrorOutput());
+                } else {
+                    $this->renderException($e, $output);
+                }
+            };
+
+            if ($phpHandler = set_exception_handler($renderException)) {
+                restore_exception_handler();
+                if ($debugHandler = $phpHandler[0]->setExceptionHandler($renderException)) {
+                    $phpHandler[0]->setExceptionHandler($debugHandler);
+                }
+            }*/
+
+            $this->configureIO($input, $output);
+
             try {
                 $command = $this->find($name);
 
                 // run the current command
-                $exitCode = $command->run($input);
+                $exitCode = $command->run($input, $output);
             } catch (\Exception $e) {
-                throw $e;
+                if (!$this->catchExceptions) {
+                    throw $e;
+                }
+
             }
 
             return $exitCode;
@@ -107,6 +144,15 @@
             $this->commands[$command->getName()] = $command;
 
             return $command;
+        }
+
+
+        /**
+         * Configures the input and output instances based on the user arguments and options.
+         */
+        protected function configureIO(InputInterface $input, OutputInterface $output)
+        {
+
         }
 
         /**
@@ -190,6 +236,16 @@
             return [new HelpCommand()];
         }
 
+        /**
+         * Sets whether to catch exceptions or not during commands execution.
+         *
+         * @param bool $boolean Whether to catch exceptions or not during commands execution
+         */
+        public function setCatchExceptions($boolean)
+        {
+            $this->catchExceptions = (bool) $boolean;
+        }
+
         private function init()
         {
             if($this->isInitialized)
@@ -199,5 +255,80 @@
             foreach ($this->getDefaultCommands() as $command) {
                 $this->add($command);
             }
+        }
+
+        /**
+         * Renders a caught exception.
+         */
+        public function renderException(\Exception $e, OutputInterface $output)
+        {
+            $output->writeln('', OutputInterface::VERBOSITY_QUIET);
+            $this->doRenderException($e, $output);
+
+            if (null !== $this->runningCommand) {
+                $output->writeln(sprintf('<info>%s</info>', sprintf($this->runningCommand->getSynopsis(), $this->getName())), OutputInterface::VERBOSITY_QUIET);
+                $output->writeln('', OutputInterface::VERBOSITY_QUIET);
+            }
+        }
+
+        protected function doRenderException(\Exception $e, OutputInterface $output)
+        {
+            do {
+                $message = trim($e->getMessage());
+                if ('' === $message || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                    $title = sprintf('  [%s%s]  ', get_class($e), 0 !== ($code = $e->getCode()) ? ' ('.$code.')' : '');
+                    $len = Helper::strlen($title);
+                } else {
+                    $len = 0;
+                }
+
+                $width = $this->terminal->getWidth() ? $this->terminal->getWidth() - 1 : PHP_INT_MAX;
+                $lines = array();
+
+                foreach ('' !== $message ? preg_split('/\r?\n/', $message) : array() as $line) {
+                    foreach ($this->splitStringByWidth($line, $width - 4) as $line) {
+                        // pre-format lines to get the right string length
+                        $lineLength = Helper::strlen($line) + 4;
+                        $lines[] = array($line, $lineLength);
+                        $len = max($lineLength, $len);
+                    }
+                }
+
+                $messages = array();
+
+                if (!$e instanceof ExceptionInterface || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                    $messages[] = sprintf('<comment>%s</comment>', OutputFormatter::escape(sprintf('In %s line %s:', basename($e->getFile()) ?: 'n/a', $e->getLine() ?: 'n/a')));
+                }
+
+                $messages[] = $emptyLine = sprintf('<error>%s</error>', str_repeat(' ', $len));
+
+                if ('' === $message || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                    $messages[] = sprintf('<error>%s%s</error>', $title, str_repeat(' ', max(0, $len - Helper::strlen($title))));
+                }
+
+                foreach ($lines as $line) {
+                    $messages[] = sprintf('<error>  %s  %s</error>', OutputFormatter::escape($line[0]), str_repeat(' ', $len - $line[1]));
+                }
+
+                $messages[] = $emptyLine;
+                $messages[] = '';
+                $output->writeln($messages, OutputInterface::VERBOSITY_QUIET);
+
+                if (OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
+                    $output->writeln('<comment>Exception trace:</comment>', OutputInterface::VERBOSITY_QUIET);
+                    // exception related properties
+                    $trace = $e->getTrace();
+
+                    for ($i = 0, $count = count($trace); $i < $count; ++$i) {
+                        $class = isset($trace[$i]['class']) ? $trace[$i]['class'] : '';
+                        $type = isset($trace[$i]['type']) ? $trace[$i]['type'] : '';
+                        $function = $trace[$i]['function'];
+                        $file = isset($trace[$i]['file']) ? $trace[$i]['file'] : 'n/a';
+                        $line = isset($trace[$i]['line']) ? $trace[$i]['line'] : 'n/a';
+                        $output->writeln(sprintf(' %s%s%s() at <info>%s:%s</info>', $class, $type, $function, $file, $line), OutputInterface::VERBOSITY_QUIET);
+                    }
+                    $output->writeln('', OutputInterface::VERBOSITY_QUIET);
+                }
+            } while ($e = $e->getPrevious());
         }
     }

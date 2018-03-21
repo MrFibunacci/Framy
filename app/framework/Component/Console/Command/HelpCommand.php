@@ -10,6 +10,7 @@
 
     use app\framework\Component\Console\Input\InputArgument;
     use app\framework\Component\Console\Input\InputInterface;
+    use app\framework\Component\Console\Output\ConsoleOutput;
 
     class HelpCommand extends Command
     {
@@ -26,8 +27,7 @@
   <info>php Framy %command.full_name% list</info>
 You can also output the help in other formats by using the <comment>--format</comment> option:
   <info>php Framy %command.full_name% --format=xml list</info>
-To display the list of available commands, please use the <info>list</info> command."
-                );
+To display the list of available commands, please use the <info>list</info> command.\n");
         }
 
         public function setCommand(Command $command)
@@ -38,14 +38,15 @@ To display the list of available commands, please use the <info>list</info> comm
         /**
          * {@inheritdoc}
          */
-        protected function execute(InputInterface $input)
+        protected function execute(InputInterface $input, ConsoleOutput $output)
         {
             if (null === $this->command) {
                 $this->command = $this->getKernel()->find($input->getArgument('command_name'));
             }
 
             //TODO: give it to some sort of output parser to create a beautiful output
-            echo $this->command->getHelp();
+            //echo $this->command->getHelp();
+            $output->writeln("Hallo Welt");
 
             $this->command = null;
         }
