@@ -27,6 +27,7 @@
         private $ignoreValidationErrors;
         private $help;
         private $code;
+        private $hidden = false;
 
         /**
          * Command constructor.
@@ -135,6 +136,26 @@
         }
 
         /**
+         * Returns the processed help for the command replacing the %command.name% and
+         * %command.full_name% patterns with the real values dynamically.
+         *
+         * @return string The processed help for the command
+         */
+        public function getProcessedHelp()
+        {
+            $name = $this->name;
+            $placeholders = array(
+                '%command.name%',
+                '%command.full_name%',
+            );
+            $replacements = array(
+                $name,
+                $_SERVER['PHP_SELF'].' '.$name,
+            );
+            return str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());
+        }
+
+        /**
          * Sets the code to execute when running this command.
          *
          * If this method is used, it ov
@@ -195,6 +216,27 @@
             $this->signature = $signature;
         }
 
+
+        /**
+         * @param bool $hidden Whether or not the command should be hidden from the list of commands
+         *
+         * @return Command The current instance
+         */
+        public function setHidden($hidden)
+        {
+            $this->hidden = (bool) $hidden;
+
+            return $this;
+        }
+
+        /**
+         * @return bool whether the command should be publicly shown or not
+         */
+        public function isHidden()
+        {
+            return $this->hidden;
+        }
+
         /**
          * @return string
          */
@@ -212,6 +254,21 @@
             $this->description = $description;
 
             return $this;
+        }
+
+        /**
+         * Gets the InputDefinition to be used to create representations of this Command.
+         *
+         * Can be overridden to provide the original command representation when it would otherwise
+         * be changed by merging with the application InputDefinition.
+         *
+         * This method is not part of public API and should not be used directly.
+         *
+         * @return InputDefinition An InputDefinition instance
+         */
+        public function getNativeDefinition()
+        {
+            return $this->getDefinition();
         }
 
         /**

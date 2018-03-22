@@ -9,9 +9,11 @@
     namespace app\framework\Component\Console;
 
     use app\framework\Component\Console\Command\Command;
+    use app\framework\Component\Console\Command\ListCommand;
     use app\framework\Component\Console\CommandLoader\CommandLoader;
     use app\framework\Component\Console\Command\HelpCommand;
     use app\framework\Component\Console\Exception\CommandNotFoundException;
+    use app\framework\Component\Console\Helper\Helper;
     use app\framework\Component\Console\Input\ArgvInput;
     use app\framework\Component\Console\Input\InputInterface;
     use app\framework\Component\Console\Output\ConsoleOutput;
@@ -41,7 +43,6 @@
             try {
                 $this->commandLoader = new CommandLoader();
                 $this->terminal = new Terminal();
-                dd($this->terminal->getWidth());
             } catch (\Exception $e) {
                 echo "Some shit went wrong: ".$e->getMessage()."\n";
             }
@@ -116,6 +117,10 @@
                     throw $e;
                 }
 
+                // temp: some shit went wrong
+                $exitCode = 1;
+                echo "oh sheet some error happened:\n";
+                echo $e->getMessage(); echo "\n";
             }
 
             return $exitCode;
@@ -133,7 +138,7 @@
                 return;
             }
 
-            if (null === $command->getDefinition()) {
+            if ($command->getDefinition() === null) {
                 throw new \LogicException(sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', get_class($command)));
             }
 
@@ -146,13 +151,53 @@
             return $command;
         }
 
-
         /**
          * Configures the input and output instances based on the user arguments and options.
+         * @param InputInterface  $input
+         * @param OutputInterface $output
          */
         protected function configureIO(InputInterface $input, OutputInterface $output)
         {
+            if (true === $input->hasParameterOption(array('--ansi'), true)) {
+                $output->setDecorated(true);
+            } elseif (true === $input->hasParameterOption(array('--no-ansi'), true)) {
+                $output->setDecorated(false);
+            }
 
+            if (true === $input->hasParameterOption(array('--no-interaction', '-n'), true)) {
+                $input->setInteractive(false);
+            }
+
+            switch ($shellVerbosity = (int) getenv('SHELL_VERBOSITY')) {
+                case -1: $output->setVerbosity(OutputInterface::VERBOSITY_QUIET); break;
+                case 1: $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE); break;
+                case 2: $output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE); break;
+                case 3: $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG); break;
+                default: $shellVerbosity = 0; break;
+            }
+
+            if (true === $input->hasParameterOption(array('--quiet', '-q'), true)) {
+                $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+                $shellVerbosity = -1;
+            } else {
+                if ($input->hasParameterOption('-vvv', true) || $input->hasParameterOption('--verbose=3', true) || 3 === $input->getParameterOption('--verbose', false, true)) {
+                    $output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+                    $shellVerbosity = 3;
+                } elseif ($input->hasParameterOption('-vv', true) || $input->hasParameterOption('--verbose=2', true) || 2 === $input->getParameterOption('--verbose', false, true)) {
+                    $output->setVerbosity(OutputInterface::VERBOSITY_VERY_VERBOSE);
+                    $shellVerbosity = 2;
+                } elseif ($input->hasParameterOption('-v', true) || $input->hasParameterOption('--verbose=1', true) || $input->hasParameterOption('--verbose', true) || $input->getParameterOption('--verbose', false, true)) {
+                    $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+                    $shellVerbosity = 1;
+                }
+            }
+
+            if (-1 === $shellVerbosity)
+                $input->setInteractive(false);
+
+            putenv('SHELL_VERBOSITY='.$shellVerbosity);
+            $_ENV['SHELL_VERBOSITY'] = $shellVerbosity;
+            $_SERVER['SHELL_VERBOSITY'] = $shellVerbosity;
         }
 
         /**
@@ -233,7 +278,7 @@
          */
         private function getDefaultCommands()
         {
-            return [new HelpCommand()];
+            return [new HelpCommand(), new ListCommand()];
         }
 
         /**
@@ -275,6 +320,7 @@
         {
             do {
                 $message = trim($e->getMessage());
+
                 if ('' === $message || OutputInterface::VERBOSITY_VERBOSE <= $output->getVerbosity()) {
                     $title = sprintf('  [%s%s]  ', get_class($e), 0 !== ($code = $e->getCode()) ? ' ('.$code.')' : '');
                     $len = Helper::strlen($title);

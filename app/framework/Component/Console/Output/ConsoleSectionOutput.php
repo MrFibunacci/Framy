@@ -9,6 +9,7 @@
 
     namespace app\framework\Component\Console\Output;
 
+    use app\framework\Component\Console\Helper\Helper;
     use app\framework\Component\Console\Output\Formatter\OutputFormatterInterface;
 
     class ConsoleSectionOutput extends StreamOutput
@@ -95,59 +96,27 @@
         {
             $numberOfLinesToClear = $numberOfLinesToClearFromCurrentSection;
             $erasedContent = array();
+
             foreach ($this->sections as $section) {
-                if ($section === $this) {
+                if ($section === $this)
                     break;
-                }
+
                 $numberOfLinesToClear += $section->lines;
                 $erasedContent[] = $section->getContent();
             }
+
             if ($numberOfLinesToClear > 0) {
                 // move cursor up n lines
                 parent::doWrite(sprintf("\x1b[%dA", $numberOfLinesToClear), false);
                 // erase to end of screen
                 parent::doWrite("\x1b[0J", false);
             }
+
             return implode('', array_reverse($erasedContent));
         }
 
         private function getDisplayLength(string $text): string
         {
-            return $this->strlenWithoutDecoration($this->getFormatter(), str_replace("\t", '        ', $text));
-        }
-
-        // some little helper:
-
-        public function strlenWithoutDecoration(OutputFormatterInterface $formatter, $string)
-        {
-            return $this->strlen($this->removeDecoration($formatter, $string));
-        }
-
-        public function removeDecoration(OutputFormatterInterface $formatter, $string)
-        {
-            $isDecorated = $formatter->isDecorated();
-            $formatter->setDecorated(false);
-            // remove <...> formatting
-            $string = $formatter->format($string);
-            // remove already formatted characters
-            $string = preg_replace("/\033\[[^m]*m/", '', $string);
-            $formatter->setDecorated($isDecorated);
-
-            return $string;
-        }
-
-        /**
-         * Returns the length of a string, using mb_strwidth if it is available.
-         *
-         * @param string $string The string to check its length
-         *
-         * @return int The length of the string
-         */
-        public static function strlen($string)
-        {
-            if ($encoding = mb_detect_encoding($string, null, true) === false)
-                return strlen($string);
-
-            return mb_strwidth($string, $encoding);
+            return Helper::strlenWithoutDecoration($this->getFormatter(), str_replace("\t", '        ', $text));
         }
     }
