@@ -17,7 +17,6 @@
     use app\framework\Component\Console\Input\ArgvInput;
     use app\framework\Component\Console\Input\InputInterface;
     use app\framework\Component\Console\Output\ConsoleOutput;
-    use app\framework\Component\Console\Output\ConsoleOutputInterface;
     use app\framework\Component\Console\Output\Formatter\OutputFormatter;
     use app\framework\Component\Console\Output\OutputInterface;
 

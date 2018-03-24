@@ -15,7 +15,7 @@
     use app\framework\Component\Console\Kernel;
     use app\framework\Component\Console\Output\OutputInterface;
 
-    abstract class Descriptor
+    abstract class Descriptor implements DescriptorInterface
     {
         /**
          * @var OutputInterface
