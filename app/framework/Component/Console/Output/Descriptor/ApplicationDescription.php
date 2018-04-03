@@ -51,6 +51,7 @@
             if (null === $this->namespaces) {
                 $this->inspectApplication();
             }
+
             return $this->namespaces;
         }
 
@@ -62,6 +63,7 @@
             if (null === $this->commands) {
                 $this->inspectApplication();
             }
+
             return $this->commands;
         }
 
@@ -82,7 +84,7 @@
 
         private function inspectApplication()
         {
-            $this->commands = array();
+            $this->commands   = array();
             $this->namespaces = array();
             $all = $this->kernel->all($this->namespace ? $this->kernel->findNamespace($this->namespace) : null);
 
@@ -107,10 +109,16 @@
             }
         }
 
+        /**
+         * Sort array of commands by array key.
+         *
+         * @param array $commands
+         * @return array
+         */
         private function sortCommands(array $commands): array
         {
             $namespacedCommands = array();
-            $globalCommands = array();
+            $globalCommands     = array();
 
             foreach ($commands as $name => $command) {
                 $key = $this->kernel->extractNamespace($name, 1);
@@ -127,6 +135,7 @@
             foreach ($namespacedCommands as &$commandsSet) {
                 ksort($commandsSet);
             }
+
             // unset reference to keep scope clear
             unset($commandsSet);
             return $namespacedCommands;

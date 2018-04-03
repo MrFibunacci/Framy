@@ -180,7 +180,7 @@
         protected function describeApplication(Kernel $kernel, array $options = array())
         {
             $describedNamespace = isset($options['namespace']) ? $options['namespace'] : null;
-            $description        = new ApplicationDescription($kernel, $describedNamespace);
+            $description = new ApplicationDescription($kernel, $describedNamespace);
 
             if (isset($options['raw_text']) && $options['raw_text']) {
                 $width = $this->getColumnWidth($description->getCommands());
@@ -199,7 +199,7 @@
                 $this->writeText("\n");
                 $this->writeText("\n");
 
-                $commands = $description->getCommands();
+                $commands   = $description->getCommands();
                 $namespaces = $description->getNamespaces();
 
                 if ($describedNamespace && $namespaces) {
@@ -227,9 +227,8 @@
                         return isset($commands[$name]);
                     });
 
-                    if (!$namespace['commands']) {
+                    if (!$namespace['commands'])
                         continue;
-                    }
 
                     if (!$describedNamespace && ApplicationDescription::GLOBAL_NAMESPACE !== $namespace['id']) {
                         $this->writeText("\n");
@@ -341,4 +340,18 @@
 
             return $totalWidth;
         }
+
+        /**
+         * Formats command aliases to show them in the command description.
+         */
+        private function getCommandAliasesText(Command $command): string
+        {
+            $text = '';
+            $aliases = $command->getAliases();
+            if ($aliases) {
+                $text = '['.implode('|', $aliases).'] ';
+            }
+            return $text;
+        }
+
     }

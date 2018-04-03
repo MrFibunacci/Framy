@@ -13,7 +13,6 @@
     use app\framework\Component\Console\Input\InputInterface;
     use app\framework\Component\Console\Input\InputOption;
     use app\framework\Component\Console\Output\ConsoleOutput;
-    use app\framework\Component\Console\Output\Formatter\OutputFormatterStyle;
 
     class HelpCommand extends Command
     {

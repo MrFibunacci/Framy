@@ -22,7 +22,6 @@
                 foreach($this->defaultCommandPaths as $directory) {
                     $files = glob($directory.'/*.php');
                     foreach($files as $file) {
-                        //var_dump($file);
                         $this->registerByPath($file);
                     }
                 }

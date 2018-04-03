@@ -28,6 +28,7 @@
         private $help;
         private $code;
         private $hidden = false;
+        private $aliases;
 
         /**
          * Command constructor.
@@ -120,9 +121,8 @@
                 }
             }
 
-            if ($input->isInteractive()) {
+            if ($input->isInteractive())
                 $this->interact($input);
-            }
 
             $input->validate();
 
@@ -144,14 +144,17 @@
         public function getProcessedHelp()
         {
             $name = $this->name;
+
             $placeholders = array(
                 '%command.name%',
                 '%command.full_name%',
             );
+
             $replacements = array(
                 $name,
                 $_SERVER['PHP_SELF'].' '.$name,
             );
+
             return str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());
         }
 
@@ -301,6 +304,7 @@
             } else {
                 $this->definition->setDefinition($definition);
             }
+
             return $this;
         }
 
@@ -315,6 +319,16 @@
         }
 
         /**
+         * Returns the aliases for the command.
+         *
+         * @return array An array of aliases for the command
+         */
+        public function getAliases()
+        {
+            return $this->aliases;
+        }
+
+        /**
          * Validates a command name
          *
          * It must be non-empty and parts can optionally be separated by ":".
@@ -324,8 +338,7 @@
          */
         private function validateName($name)
         {
-            if(!preg_match('/^[^\:]++(\:[^\:]++)*$/', $name)) {
+            if(!preg_match('/^[^\:]++(\:[^\:]++)*$/', $name))
                 throw new \InvalidArgumentException(sprintf('Command name "%s" is invalid.', $name));
-            }
         }
     }
