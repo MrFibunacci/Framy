@@ -22,6 +22,7 @@
          */
         public static function strlen($string)
         {
+            
             if (false === $encoding = mb_detect_encoding($string, null, true))
                 return strlen($string);
 
