@@ -1,0 +1,19 @@
+{
+  "name": "framy",
+  "version": "0.2.0",
+  "description": "Just a try to make an own PHP framework. Which is quite meh.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrFibunacci/Framy.git"
+  },
+  "author": "mrfibunacci",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrFibunacci/Framy/issues"
+  },
+  "homepage": "https://github.com/MrFibunacci/Framy#readme"
+}
