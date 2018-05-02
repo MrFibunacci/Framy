@@ -69,15 +69,14 @@
 This is absolutely not stolen from Laravel... *cough* *cough*
 -->
 <div class="flex-center position-ref full-height">
-
     <div class="content">
         <div class="title m-b-md">
             Framy
         </div>
-
         <div class="links">
-            <a href="https://github.com/MrFibunacci/Framy/wiki">Documentation</a>
-            <a href="https://github.com/MrFibunacci/Framy">GitHub</a>
+            <a href="https://framyframework.github.io/FramyDocumentation/">Documentation</a>
+            <a href="https://framyframework.github.io/FramyAPI/">API</a>
+            <a href="https://github.com/MrFibunacci/framyframework">GitHub</a>
         </div>
     </div>
 </div>
