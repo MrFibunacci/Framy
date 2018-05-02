@@ -145,6 +145,7 @@
         }
 
         /**
+         * TODO: write actual method
          * Check if key is a directory<br />
          * Requires '\app\framework\Component\Storage\Driver\DirectoryAwareInterface' to be implemented by a Driver class
          *
@@ -156,7 +157,10 @@
         public function isDirectory($key)
         {
             if($this->supportsDirectories()){
+                return true;
             }
+
+            return false;
         }
 
         /**
@@ -220,7 +224,7 @@
 
         /**
          * Can this storage handle directories?
-         * @return mixed
+         * @return bool
          */
         public function supportsDirectories()
         {
@@ -229,7 +233,7 @@
 
         /**
          * Can this storage touch a file?
-         * @return mixed
+         * @return bool
          */
         public function supportsTouching()
         {
@@ -238,7 +242,7 @@
 
         /**
          * Can this storage handle absolute paths?
-         * @return mixed
+         * @return bool
          */
         public function supportsAbsolutePaths()
         {
@@ -247,7 +251,7 @@
 
         /**
          * Can this storage get file size info?
-         * @return mixed
+         * @return bool
          */
         public function supportsSize()
         {

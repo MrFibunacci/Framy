@@ -1,13 +1,20 @@
-# Framy
-Just a try to make an own PHP framework. Which is quite meh.
-Not the best, but still good. 
 
-Get started [here](https://github.com/MrFibunacci/Framy/wiki/Getting-started)
+<p align="center">
+    <a href="https://scrutinizer-ci.com/g/MrFibunacci/Framy/"><img src="https://scrutinizer-ci.com/g/MrFibunacci/Framy/badges/quality-score.png?b=v0" alt="Code Quality"></a>
+    <a href="https://codeclimate.com/github/MrFibunacci/Framy/maintainability"><img src="https://api.codeclimate.com/v1/badges/f2e83c58ed41d132cce0/maintainability" /></a>
+</p>
 
-view [Features](https://github.com/MrFibunacci/Framy/wiki/Features)
+# About Framy
 
-## install
-Just download the files configure the configs and you can start.
+Framy is an web application framework. Made to make web developing easier.
 
-## Docs
-You can find the Documentary and API [here](https://github.com/MrFibunacci/Framy/wiki)
+## Features
+
+- Routing powerd by Klein framework
+- Powerfull Templateengine - Smarty
+- Easy database interaction with Medoo
+- Home made storage system to easyly interact with files and directorys
+
+## Learning Framy
+
+You can find the Documentary and API [here](http://framyframework.github.io/FramyDocumentaion/)

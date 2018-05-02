@@ -64,7 +64,7 @@
         }
     }
 
-    if(! function_exists("get_string_between")){
+    if(! function_exists("getStringBetween")){
         /**
          * This is a handy little function to strip out a string between
          * two specified pieces of text. This could be used to parse

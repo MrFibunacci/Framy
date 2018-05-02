@@ -23,7 +23,6 @@
         function __construct($diskName)
         {
             if(self::isDisk($diskName)) {
-                //$this->disk = StdLibTrait::getConfig("app")['disks'][$diskName];
                 $this->disk = Config::getInstance()->get("disks", "filesystem")[$diskName];
             } else {
                 throw new StorageException(StorageException::DISK_NOT_FOUND);
@@ -44,7 +43,7 @@
          */
         public function isDisk($diskName)
         {
-            if($this->is(Config::getInstance()->get("disks", "filesystem")[$diskName])) {
+            if(!$this->isNull(Config::getInstance()->get("disks", "filesystem")[$diskName])) {
                 return true;
             } else {
                 return false;

@@ -14,7 +14,11 @@
     $klein = new Klein();
 
     $klein->respond("GET", "/", function(){
-        return view("fetch:welcome");
+        $Storage = new \app\framework\Component\Storage\Storage("view");
+        $Dir = new \app\framework\Component\Storage\Directory\Directory("", $Storage);
+        foreach ($Dir->filter("*.tpl") as $file){
+            var_dump($file);
+        }
     });
 
     // add more routes here ...
