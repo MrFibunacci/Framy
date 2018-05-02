@@ -34,12 +34,12 @@
 
             'view' => [
                 'driver' => 'local',
-                'root' => pathTo('/storage/templates/')
+                'root' => pathTo('/resource/templates/')
             ],
 
             'viewCompiled' => [
                 'driver' => 'local',
-                'root' => pathTo('/storage/templates/templates_c')
+                'root' => pathTo('/resource/templates/templates_c')
             ],
 
             'language' => [
