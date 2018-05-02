@@ -4,6 +4,10 @@
     <a href="https://codeclimate.com/github/MrFibunacci/Framy/maintainability"><img src="https://api.codeclimate.com/v1/badges/f2e83c58ed41d132cce0/maintainability" /></a>
 </p>
 
+# Install
+
+> npm i framy
+
 # About Framy
 
 Framy is an web application framework. Made to make web developing easier.
