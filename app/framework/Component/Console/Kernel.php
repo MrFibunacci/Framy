@@ -9,6 +9,7 @@
     namespace app\framework\Component\Console;
 
     use app\framework\Component\Console\Command\Command;
+    use app\framework\Component\Console\Command\FramyVersionCommand;
     use app\framework\Component\Console\Command\ListCommand;
     use app\framework\Component\Console\CommandLoader\CommandLoader;
     use app\framework\Component\Console\Command\HelpCommand;
@@ -26,7 +27,7 @@
 
     class Kernel
     {
-        private $commands = array();
+        //private $commands = array();
         private $commandLoader;
         private $singleCommand;
         private $defaultCommand;
@@ -151,15 +152,14 @@
                 return;
             }
 
-            if ($command->getDefinition() === null) {
+            if ($command->getDefinition() === null)
                 throw new \LogicException(sprintf('Command class "%s" is not correctly initialized. You probably forgot to call the parent constructor.', get_class($command)));
-            }
 
-            if (!$command->getName()) {
+            if (!$command->getName())
                 throw new \LogicException(sprintf('The command defined in "%s" cannot have an empty name.', get_class($command)));
-            }
 
-            $this->commands[$command->getName()] = $command;
+            //$this->commands[$command->getName()] = $command;
+            $this->commandLoader->add($command);
 
             return $command;
         }
@@ -214,6 +214,8 @@
          */
         public function find($name)
         {
+            $this->init();
+
             //TODO: implement: Contrary to get, this command tries to find the best match if you give it an abbreviation of a name or alias.
             return $this->get($name);
         }
@@ -293,7 +295,6 @@
 
             if ($this->commandLoader) {
                 foreach ($this->commandLoader->getNames() as $name) {
-                    var_dump($name);
                     if (!isset($commands[$name]) && $namespace === $this->extractNamespace($name, substr_count($namespace, ':') + 1) && $this->has($name)) {
                         $commands[$name] = $this->get($name);
                     }
@@ -448,7 +449,7 @@
          */
         private function getDefaultCommands()
         {
-            return [new HelpCommand(), new ListCommand()];
+            return [new HelpCommand(), new ListCommand(), new FramyVersionCommand()];
         }
 
         /**

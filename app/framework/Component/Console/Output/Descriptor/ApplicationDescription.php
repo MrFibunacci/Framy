@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Framy Framework
  *
  * @copyright Copyright Framy
@@ -48,7 +47,8 @@
          */
         public function getNamespaces()
         {
-            if (null === $this->namespaces) {
+            //if (null === $this->namespaces) {
+            if ([] === $this->namespaces) {
                 $this->inspectApplication();
             }
 
@@ -84,12 +84,13 @@
 
         private function inspectApplication()
         {
-            $this->commands   = array();
-            $this->namespaces = array();
+            $this->commands   = [];
+            $this->namespaces = [];
             $all = $this->kernel->all($this->namespace ? $this->kernel->findNamespace($this->namespace) : null);
+            //dd($this->kernel->findNamespace($this->namespace));
 
             foreach ($this->sortCommands($all) as $namespace => $commands) {
-                $names = array();
+                $names = [];
 
                 /** @var Command $command */
                 foreach ($commands as $name => $command) {
@@ -105,7 +106,7 @@
                     $names[] = $name;
                 }
 
-                $this->namespaces[$namespace] = array('id' => $namespace, 'commands' => $names);
+                $this->namespaces[$namespace] = ['id' => $namespace, 'commands' => $names];
             }
         }
 
@@ -117,8 +118,8 @@
          */
         private function sortCommands(array $commands): array
         {
-            $namespacedCommands = array();
-            $globalCommands     = array();
+            $namespacedCommands = [];
+            $globalCommands     = [];
 
             foreach ($commands as $name => $command) {
                 $key = $this->kernel->extractNamespace($name, 1);

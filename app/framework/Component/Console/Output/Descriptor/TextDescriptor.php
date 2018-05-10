@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Framy Framework
  *
  * @copyright Copyright Framy
@@ -212,6 +211,7 @@
                 }
 
                 // calculate max. width based on available commands per namespace
+                //TODO: somehow this does not work as intended
                 $width = $this->getColumnWidth(call_user_func_array('array_merge', array_map(function ($namespace) use ($commands) {
                     return array_intersect($namespace['commands'], array_keys($commands));
                 }, $namespaces)));
@@ -259,24 +259,11 @@
             );
         }
 
-
-        /*
-         * Formats command aliases to show them in the command description.
-         * TODO
-        private function getCommandAliasesText(Command $command): string
-        {
-            $text = '';
-            $aliases = $command->getAliases();
-            if ($aliases)
-                $text = '['.implode('|', $aliases).'] ';
-
-            return $text;
-        }*/
-
         /**
          * Formats input option/argument default value.
          *
          * @param mixed $default
+         * @return string
          */
         private function formatDefaultValue($default): string
         {
@@ -298,8 +285,9 @@
 
         /**
          * @param (Command|string)[] $commands
+         * @return int
          */
-        private function getColumnWidth(array $commands): int
+        private function getColumnWidth(array $commands = null): int
         {
             $widths = array();
 
@@ -320,6 +308,7 @@
 
         /**
          * @param InputOption[] $options
+         * @return int
          */
         private function calculateTotalWidthForOptions(array $options): int
         {
@@ -343,6 +332,9 @@
 
         /**
          * Formats command aliases to show them in the command description.
+         *
+         * @param Command $command
+         * @return string
          */
         private function getCommandAliasesText(Command $command): string
         {

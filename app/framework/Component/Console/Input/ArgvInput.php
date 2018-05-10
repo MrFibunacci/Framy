@@ -60,24 +60,84 @@
         /**
          * {@inheritdoc}
          */
-        protected function parse()
+        public function getFirstArgument()
         {
-            $parseOptions = true;
-            $this->parsed = $this->tokens;
-            array_shift($this->parsed);
-            while (null !== $token = array_shift($this->parsed)) {
-                if ($parseOptions && '' == $token) {
-                    $this->parseArgument($token);
-                } elseif ($parseOptions && '--' == $token) {
-                    $parseOptions = false;
-                } elseif ($parseOptions && 0 === strpos($token, '--')) {
-                    $this->parseLongOption($token);
-                } elseif ($parseOptions && '-' === $token[0] && '-' !== $token) {
-                    $this->parseShortOption($token);
-                } else {
-                    $this->parseArgument($token);
+            foreach ($this->tokens as $token) {
+                if ($token && '-' === $token[0]) {
+                    continue;
+                }
+                return $token;
+            }
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function hasParameterOption($values, $onlyParams = false)
+        {
+            $values = (array) $values;
+            foreach ($this->tokens as $token) {
+                if ($onlyParams && '--' === $token) {
+                    return false;
+                }
+                foreach ($values as $value) {
+                    // Options with values:
+                    //   For long options, test for '--option=' at beginning
+                    //   For short options, test for '-o' at beginning
+                    $leading = 0 === strpos($value, '--') ? $value.'=' : $value;
+                    if ($token === $value || '' !== $leading && 0 === strpos($token, $leading)) {
+                        return true;
+                    }
                 }
             }
+            return false;
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getParameterOption($values, $default = false, $onlyParams = false)
+        {
+            $values = (array) $values;
+            $tokens = $this->tokens;
+            while (0 < count($tokens)) {
+                $token = array_shift($tokens);
+                if ($onlyParams && '--' === $token) {
+                    return false;
+                }
+                foreach ($values as $value) {
+                    if ($token === $value) {
+                        return array_shift($tokens);
+                    }
+                    // Options with values:
+                    //   For long options, test for '--option=' at beginning
+                    //   For short options, test for '-o' at beginning
+                    $leading = 0 === strpos($value, '--') ? $value.'=' : $value;
+                    if ('' !== $leading && 0 === strpos($token, $leading)) {
+                        return substr($token, strlen($leading));
+                    }
+                }
+            }
+            return $default;
+        }
+
+        /**
+         * Returns a stringified representation of the args passed to the command.
+         *
+         * @return string
+         */
+        public function __toString()
+        {
+            $tokens = array_map(function ($token) {
+                if (preg_match('{^(-[^=]+=)(.+)}', $token, $match)) {
+                    return $match[1].$this->escapeToken($match[2]);
+                }
+                if ($token && '-' !== $token[0]) {
+                    return $this->escapeToken($token);
+                }
+                return $token;
+            }, $this->tokens);
+            return implode(' ', $tokens);
         }
 
         /**
@@ -158,12 +218,12 @@
                 $arg = $this->definition->getArgument($c);
                 $this->arguments[$arg->getName()] = $arg->isArray() ? array($token) : $token;
 
-            // if last argument isArray(), append token to last argument
+                // if last argument isArray(), append token to last argument
             } elseif ($this->definition->hasArgument($c - 1) && $this->definition->getArgument($c - 1)->isArray()) {
                 $arg = $this->definition->getArgument($c - 1);
                 $this->arguments[$arg->getName()][] = $token;
 
-            // unexpected argument
+                // unexpected argument
             } else {
                 $all = $this->definition->getArguments();
                 if (count($all)) {
@@ -238,83 +298,23 @@
         /**
          * {@inheritdoc}
          */
-        public function getFirstArgument()
+        protected function parse()
         {
-            foreach ($this->tokens as $token) {
-                if ($token && '-' === $token[0]) {
-                    continue;
-                }
-                return $token;
-            }
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-        public function hasParameterOption($values, $onlyParams = false)
-        {
-            $values = (array) $values;
-            foreach ($this->tokens as $token) {
-                if ($onlyParams && '--' === $token) {
-                    return false;
-                }
-                foreach ($values as $value) {
-                    // Options with values:
-                    //   For long options, test for '--option=' at beginning
-                    //   For short options, test for '-o' at beginning
-                    $leading = 0 === strpos($value, '--') ? $value.'=' : $value;
-                    if ($token === $value || '' !== $leading && 0 === strpos($token, $leading)) {
-                        return true;
-                    }
+            $parseOptions = true;
+            $this->parsed = $this->tokens;
+            array_shift($this->parsed);
+            while (null !== $token = array_shift($this->parsed)) {
+                if ($parseOptions && '' == $token) {
+                    $this->parseArgument($token);
+                } elseif ($parseOptions && '--' == $token) {
+                    $parseOptions = false;
+                } elseif ($parseOptions && 0 === strpos($token, '--')) {
+                    $this->parseLongOption($token);
+                } elseif ($parseOptions && '-' === $token[0] && '-' !== $token) {
+                    $this->parseShortOption($token);
+                } else {
+                    $this->parseArgument($token);
                 }
             }
-            return false;
-        }
-
-        /**
-         * {@inheritdoc}
-         */
-        public function getParameterOption($values, $default = false, $onlyParams = false)
-        {
-            $values = (array) $values;
-            $tokens = $this->tokens;
-            while (0 < count($tokens)) {
-                $token = array_shift($tokens);
-                if ($onlyParams && '--' === $token) {
-                    return false;
-                }
-                foreach ($values as $value) {
-                    if ($token === $value) {
-                        return array_shift($tokens);
-                    }
-                    // Options with values:
-                    //   For long options, test for '--option=' at beginning
-                    //   For short options, test for '-o' at beginning
-                    $leading = 0 === strpos($value, '--') ? $value.'=' : $value;
-                    if ('' !== $leading && 0 === strpos($token, $leading)) {
-                        return substr($token, strlen($leading));
-                    }
-                }
-            }
-            return $default;
-        }
-
-        /**
-         * Returns a stringified representation of the args passed to the command.
-         *
-         * @return string
-         */
-        public function __toString()
-        {
-            $tokens = array_map(function ($token) {
-                if (preg_match('{^(-[^=]+=)(.+)}', $token, $match)) {
-                    return $match[1].$this->escapeToken($match[2]);
-                }
-                if ($token && '-' !== $token[0]) {
-                    return $this->escapeToken($token);
-                }
-                return $token;
-            }, $this->tokens);
-            return implode(' ', $tokens);
         }
     }

@@ -8,6 +8,7 @@
     class CommandLoader implements CommandLoaderInterface
     {
         private $registeredCommands = [];
+
         private $defaultCommandPaths = [
             ROOT_PATH.'/app/custom/Commands'
         ];
@@ -80,6 +81,17 @@
             } else {
                 throw new CommandNotFoundException("Can't find a fucking command.");
             }
+        }
+
+        /**
+         * Adds a command.
+         *
+         * @param Command $command
+         * @return void
+         */
+        public function add(Command $command)
+        {
+            $this->registeredCommands[$command->getName()] = $command;
         }
 
         /**

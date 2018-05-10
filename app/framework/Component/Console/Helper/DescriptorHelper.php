@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Framy Framework
  *
  * @copyright Copyright Framy
