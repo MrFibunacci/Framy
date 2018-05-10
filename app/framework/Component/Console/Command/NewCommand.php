@@ -17,7 +17,7 @@
 
     class NewCommand extends Command
     {
-        private $defaultCommand =
+        private $commandTemplate =
 <<<'EOD'
 <?php
     
@@ -53,12 +53,12 @@ EOD;
 
         protected function execute(InputInterface $input, ConsoleOutput $output)
         {
-            $newCommandName = $input->getArgument("commandName");
+            $newCommandName = $input->getArgument("name");
 
             $File = new File($newCommandName.".php", new Storage("commands"));
             fopen($File->getAbsolutePath(), "w");
 
-            $tempDefaultCommand = str_replace("§NAME§", $newCommandName, $this->defaultCommand);
+            $tempDefaultCommand = str_replace("§NAME§", $newCommandName, $this->$commandTemplate);
             $tempDefaultCommand = str_replace("§DESCRIPTION§", $input->getArgument("description"), $tempDefaultCommand);
             $tempDefaultCommand = str_replace("§HELPER§", $input->getArgument("helper"), $tempDefaultCommand);
 
@@ -68,7 +68,7 @@ EOD;
         private function createDefinition()
         {
             return new InputDefinition([
-                new InputArgument('commandName', InputArgument::REQUIRED, "The name of the command"),
+                new InputArgument('name', InputArgument::REQUIRED, "The name of the command"),
                 new InputArgument('description', InputArgument::OPTIONAL, "The Description of the command"),
                 new InputArgument('helper', InputArgument::OPTIONAL, "The Description of the command"),
             ]);

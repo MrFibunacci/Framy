@@ -49,6 +49,10 @@
 
             'commands' => [
                 'root' => pathTo("/app/custom/Commands/")
+            ],
+
+            'controller' => [
+                'root' => pathTo("/app/custom/Http/Controller/")
             ]
         ]
     ];
