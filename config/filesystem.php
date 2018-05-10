@@ -45,6 +45,10 @@
             'language' => [
                 'driver' => 'local',
                 'root' => pathTo('/storage/lang/')
+            ],
+
+            'commands' => [
+                'root' => pathTo("/app/custom/Commands/")
             ]
         ]
     ];

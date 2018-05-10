@@ -11,6 +11,7 @@
     use app\framework\Component\Console\Command\Command;
     use app\framework\Component\Console\Command\FramyVersionCommand;
     use app\framework\Component\Console\Command\ListCommand;
+    use app\framework\Component\Console\Command\NewCommand;
     use app\framework\Component\Console\CommandLoader\CommandLoader;
     use app\framework\Component\Console\Command\HelpCommand;
     use app\framework\Component\Console\Exception\CommandNotFoundException;
@@ -449,7 +450,7 @@
          */
         private function getDefaultCommands()
         {
-            return [new HelpCommand(), new ListCommand(), new FramyVersionCommand()];
+            return [new HelpCommand(), new ListCommand(), new FramyVersionCommand(), new NewCommand()];
         }
 
         /**

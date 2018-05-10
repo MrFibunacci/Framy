@@ -22,16 +22,16 @@
 
         function __construct($diskName)
         {
-            if(self::isDisk($diskName)) {
+            if($this->isDisk($diskName)) {
                 //$this->disk = StdLibTrait::getConfig("app")['disks'][$diskName];
                 $this->disk = Config::getInstance()->get("disks", "filesystem")[$diskName];
             } else {
                 throw new StorageException(StorageException::DISK_NOT_FOUND);
             }
 
-            if(!$this->is($this->disk['driver'])) $this->disk['driver'] = Config::getInstance()->get("default", "filesystem");
+            if($this->isNull($this->disk['driver'])) $this->disk['driver'] = Config::getInstance()->get("default", "filesystem");
 
-            if($this->disk['driver'] == 'local'){
+            if($this->disk['driver'] == 'local') {
                 $this->Driver = new LocalStorageDriver($this->disk);
             }
         }
@@ -73,5 +73,4 @@
         {
             return $this->disk['root'];
         }
-
     }
