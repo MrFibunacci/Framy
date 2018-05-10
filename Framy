@@ -1,0 +1,28 @@
+#!/usr/bin/php
+<?php
+    /*---------------------------------------
+    | Bootstrap
+    |----------------------------------------
+    |
+    | We include the bootstrap file to get all the necessary stuff we need.
+    | Like the class loader and the helper functions.
+    |
+    */
+
+    require(__DIR__."/bootstrap/bootstrap.php");
+
+    /*---------------------------------------
+    | Run Framy's CLI Application
+    |----------------------------------------
+    |
+    | When we run the CLI Application, the current CLI command will be
+    | executed in this console and the response sent back to a terminal.
+    |
+    */
+
+    $Kernel = new \app\framework\Component\Console\Kernel();
+
+    $Kernel->handle(
+        new \app\framework\Component\Console\Input\ArgvInput(),
+        new \app\framework\Component\Console\Output\ConsoleOutput()
+    );

@@ -29,7 +29,6 @@
          * @param Storage $storage Storage to use
          *
          * @throws \app\framework\Component\Storage\StorageException
-         * @return \app\framework\Component\Storage\File\File
          */
         function __construct($key, Storage $storage)
         {
@@ -90,7 +89,7 @@
          *
          * @param bool  $append
          *
-         * @return $this
+         * @return bool | int
          */
         public function setContents($contents, $append = false)
         {

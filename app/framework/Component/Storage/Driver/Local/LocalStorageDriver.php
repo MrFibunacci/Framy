@@ -91,7 +91,8 @@
          */
         private function buildPath($key)
         {
-            $path = $this->helper->buildPath($key, $this->directory, $this->create);
+            //$path = $this->helper->buildPath($key, $this->directory, $this->create);
+            $path = $this->helper->buildPath($key, $this->directory, true);
             if (strpos($path, $this->directory) !== 0) {
                 throw new StorageException(StorageException::PATH_IS_OUT_OF_STORAGE_ROOT, [
                     $path,
@@ -152,7 +153,7 @@
         {
             $this->recentKey = $key;
 
-            if($this->keyExists($key)){
+            if($this->keyExists($key)) {
                 return file_put_contents($this->buildPath($key), $contents);
             }
 

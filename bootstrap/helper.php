@@ -1,15 +1,15 @@
 <?php
-    if(! function_exists("dd")){
+    if(! function_exists("dd")) {
         /**
          * Little helper called dump and die
          * @param $val
          */
-        function dd($val)  {
+        function dd($val) {
             var_dump($val);die;
         }
     }
 
-    if(! function_exists("view")){
+    if(! function_exists("view")) {
         /**
          * Get the evaluated view contents for the given view.
          *
@@ -18,25 +18,25 @@
          * @param  array   $mergeData   Some shit I don't know yet
          * @return \app\framework\Component\View\View
          */
-        function view($view = null, $data = [], $mergeData = []){
+        function view($view = null, $data = [], $mergeData = []) {
             $View = new \app\framework\Component\View\View($view, $data);
             return $View->render();
         }
     }
 
-    if(! function_exists("app")){
+    if(! function_exists("app")) {
         /**
          * Used to easily call Methods from classes without manually set
          * locally Instances of them.
          *
          * @param string $classMethod The class name(if in \app\custom\ namespace) or the "namespace+className@methodToCall"
          */
-        function app($classMethod, $param = null){
+        function app($classMethod, $param = null) {
             return $GLOBALS["App"]->call($classMethod, $param);
         }
     }
 
-    if(! function_exists("url")){
+    if(! function_exists("url")) {
         /**
          * Basically completes just the the url
          * e.g. /test to yourexample.site/test
@@ -47,12 +47,12 @@
          *
          * @return string
          */
-        function url($path){
+        function url($path) {
             return $_SERVER['HTTP_HOST'].$path;
         }
     }
 
-    if(! function_exists("pathTo")){
+    if(! function_exists("pathTo")) {
         /**
          * Easy function to get the path to the project + if you want an directory in it.
          *
@@ -64,7 +64,7 @@
         }
     }
 
-    if(! function_exists("getStringBetween")){
+    if(! function_exists("getStringBetween")) {
         /**
          * This is a handy little function to strip out a string between
          * two specified pieces of text. This could be used to parse
@@ -75,7 +75,7 @@
          * @param $end
          * @return bool|string
          */
-        function getStringBetween($string, $start, $end){
+        function getStringBetween($string, $start, $end) {
             $string = ' ' . $string;
             $ini = strpos($string, $start);
             if ($ini == 0) return '';
